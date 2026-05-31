@@ -24,18 +24,39 @@ def initialize_database():
     conn.commit()
     conn.close()
 
-def insert_activity(timestamp,app_name,window_title,source):
-    conn=get_connection()
-    cursor=conn.cursor()
+def insert_activity(
+    timestamp,
+    app_name,
+    window_title,
+    source,
+    ocr_text=None
+):
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
     cursor.execute("""
-     INSERT INTO activity_logs
-     (timestamp,app_name,window_title,source)
-     VALUES(?,?,?,?)
-    """,(timestamp,app_name,window_title,source))
+        INSERT INTO activity_logs
+        (
+            timestamp,
+            app_name,
+            window_title,
+            ocr_text,
+            source
+        )
+        VALUES (?, ?, ?, ?, ?)
+    """,
+    (
+        timestamp,
+        app_name,
+        window_title,
+        ocr_text,
+        source
+    ))
 
     conn.commit()
     conn.close()
-
+    
 def get_all_activities():
     conn=get_connection()
     cursor=conn.cursor()
