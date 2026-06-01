@@ -56,7 +56,7 @@ def insert_activity(
 
     conn.commit()
     conn.close()
-    
+
 def get_all_activities():
     conn=get_connection()
     cursor=conn.cursor()
@@ -67,4 +67,20 @@ def get_all_activities():
     
     activities=cursor.fetchall()
     conn.close()
+    return activities
+
+def get_recent_activities(limit=20):
+    conn=get_connection()
+    cursor=conn.cursor()
+
+    cursor.execute("""
+    SELECT *
+    FROM activity_logs
+    ORDER BY id DESC
+    LIMIT ?
+    """,(limit,))
+
+    activities=cursor.fetchall()
+    conn.close()
+
     return activities
