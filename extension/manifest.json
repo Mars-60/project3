@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+
+  "name": "PersonalOS AI",
+
+  "version": "1.0",
+
+  "description": "PersonalOS AI Browser Collector",
+
+  "permissions": [
+    "tabs"
+  ],
+
+  "host_permissions": [
+    "http://127.0.0.1:5000/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
