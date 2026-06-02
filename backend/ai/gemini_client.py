@@ -2,31 +2,50 @@ from google import genai
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env
 load_dotenv()
 
-# Read API key
-api_key = os.getenv("GEMINI_API_KEY")
+api_key = os.getenv(
+    "GEMINI_API_KEY"
+)
 
 if not api_key:
     raise ValueError(
         "GEMINI_API_KEY not found in .env file"
     )
 
-# Create Gemini client
 client = genai.Client(
     api_key=api_key
 )
 
 
 def ask_gemini(prompt):
-    """
-    Send a prompt to Gemini and return the response text.
-    """
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
-    )
+    try:
 
-    return response.text
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+
+        print(
+            "\nDEBUG RESPONSE:"
+        )
+
+        print(response)
+
+        if hasattr(
+            response,
+            "text"
+        ):
+            return response.text
+
+        return str(response)
+
+    except Exception as e:
+
+        print(
+            "GEMINI ERROR:",
+            e
+        )
+
+        return None
