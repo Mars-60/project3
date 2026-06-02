@@ -59,6 +59,58 @@ def browser_activity():
         ), 500
 
 
+@app.route(
+    "/chat",
+    methods=["POST"]
+)
+def chat():
+
+    try:
+
+        data = request.json or {}
+
+        question = data.get(
+            "question"
+        )
+
+        if not question:
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "question is required"
+                }
+            ), 400
+
+        from backend.agents.unified_memory_agent import (
+            answer_memory_question
+        )
+
+        answer = answer_memory_question(
+            question
+        )
+
+        return jsonify(
+            {
+                "status": "success",
+                "answer": answer
+            }
+        )
+
+    except Exception as e:
+
+        print(
+            "CHAT ERROR:",
+            e
+        )
+
+        return jsonify(
+            {
+                "status": "error",
+                "message": str(e)
+            }
+        ), 500
+
+
 if __name__ == "__main__":
 
     app.run(
