@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07080f;
+  --surface: #0d0f1a;
+  --surface-2: #13162a;
+  --surface-3: #1a1e35;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.14);
+  --text: #f0f2ff;
+  --muted: #7e85a3;
+  --soft: #b8bdd6;
+  --accent: #6c8aff;
+  --accent-glow: rgba(108,138,255,0.18);
+  --accent-2: #a78bfa;
+  --green: #34d399;
+  --green-dim: rgba(52,211,153,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+}
+
+body {
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(108,138,255,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 85% 80%, rgba(167,139,250,0.07) 0%, transparent 60%),
+    var(--bg);
+}
+
+/* ── Landing card ── */
+.page {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+
+.hero {
+  max-width: 500px;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 8px;
+  background: var(--accent-glow);
+  border: 1px solid rgba(108,138,255,0.25);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+}
+
+.hero-badge .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: blink 2s ease-in-out infinite;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(52px, 8vw, 76px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  background: linear-gradient(135deg, #fff 30%, #7c8fff 70%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 36px;
+  padding-top: 36px;
+  border-top: 1px solid var(--border);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Launcher ── */
+.launcher {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid rgba(108,138,255,0.3);
+  background: linear-gradient(145deg, rgba(108,138,255,0.25), rgba(167,139,250,0.15));
+  backdrop-filter: blur(20px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 0 0 0 rgba(108,138,255,0.4);
+  animation: launcher-pulse 3s ease-in-out infinite;
+}
+
+.launcher:hover {
+  transform: scale(1.08);
+  border-color: rgba(108,138,255,0.6);
+  box-shadow: 0 0 28px rgba(108,138,255,0.3), 0 8px 32px rgba(0,0,0,0.4);
+  animation: none;
+}
+
+.launcher:active { transform: scale(0.96); }
+
+.launcher-icon {
+  width: 26px;
+  height: 26px;
+  position: relative;
+  transition: opacity 200ms;
+}
+
+.launcher-icon svg { width: 100%; height: 100%; }
+
+.launcher.open .launcher-icon { opacity: 0; transform: scale(0.5); }
+
+.launcher-close {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 200ms;
+  font-size: 18px;
+  color: var(--text);
+}
+
+.launcher.open .launcher-close { opacity: 1; transform: scale(1); }
+
+/* ── Panel ── */
+.panel {
+  position: fixed;
+  right: 28px;
+  bottom: 104px;
+  width: min(420px, calc(100vw - 24px));
+  height: min(640px, calc(100vh - 140px));
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 12, 22, 0.88);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  backdrop-filter: blur(32px) saturate(150%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 32px 80px rgba(0,0,0,0.6),
+    0 0 60px rgba(108,138,255,0.06);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(16px) scale(0.97);
+  transform-origin: bottom right;
+  transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* ── Header ── */
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.02);
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(108,138,255,0.4), rgba(167,139,250,0.3));
+  border: 1px solid rgba(108,138,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar svg { width: 18px; height: 18px; }
+
+.header-info { flex: 1; min-width: 0; }
+
+.header-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--green);
+  margin-top: 2px;
+}
+
+.status-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 5px var(--green);
+  animation: blink 2s ease-in-out infinite;
+}
+
+.header-actions { display: flex; gap: 6px; }
+
+.icon-btn {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  font-size: 14px;
+}
+
+.icon-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+/* ── Scroll area ── */
+.chat-area {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.chat-area::-webkit-scrollbar { width: 4px; }
+.chat-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 99px; }
+
+/* ── Welcome ── */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 16px 8px;
+  gap: 0;
+}
+
+.welcome.gone { display: none; }
+
+.welcome-icon {
+  width: 56px; height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(108,138,255,0.3), rgba(167,139,250,0.2));
+  border: 1px solid rgba(108,138,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.welcome-icon svg { width: 26px; height: 26px; }
+
+.welcome h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.welcome p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 280px;
+  margin-bottom: 22px;
+  font-weight: 300;
+}
+
+.chip-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.chip {
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--soft);
+  text-align: left;
+  cursor: pointer;
+  transition: all 150ms;
+  line-height: 1.4;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.chip:hover {
+  background: var(--surface-3);
+  border-color: rgba(108,138,255,0.3);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+/* ── Messages ── */
+.msgs { display: flex; flex-direction: column; gap: 10px; }
+
+.msg {
+  max-width: 86%;
+  padding: 11px 14px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  animation: msgIn 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #3a5bff, #6c4dff);
+  color: #fff;
+  border-bottom-right-radius: 5px;
+  box-shadow: 0 4px 20px rgba(58,91,255,0.25);
+}
+
+.msg.ai {
+  align-self: flex-start;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--soft);
+  border-bottom-left-radius: 5px;
+}
+
+.msg.err {
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.2);
+  color: #fca5a5;
+}
+
+.typing-indicator {
+  align-self: flex-start;
+  display: flex;
+  gap: 5px;
+  padding: 13px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  border-bottom-left-radius: 5px;
+}
+
+.typing-indicator span {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+
+/* ── Composer ── */
+.composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  background: rgba(255,255,255,0.015);
+  flex-shrink: 0;
+}
+
+.composer textarea {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  color: var(--text);
+  resize: none;
+  outline: none;
+  min-height: 44px;
+  max-height: 120px;
+  line-height: 1.5;
+  transition: border-color 150ms, box-shadow 150ms;
+  overflow-y: auto;
+}
+
+.composer textarea::placeholder { color: var(--muted); }
+
+.composer textarea:focus {
+  border-color: rgba(108,138,255,0.45);
+  box-shadow: 0 0 0 3px rgba(108,138,255,0.08);
+}
+
+.send-btn {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #3a5bff, #6c4dff);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 150ms;
+  box-shadow: 0 4px 14px rgba(58,91,255,0.3);
+}
+
+.send-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(58,91,255,0.4);
+}
+
+.send-btn:active:not(:disabled) { transform: translateY(0); }
+
+.send-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.send-btn svg { width: 18px; height: 18px; }
+
+/* ── Animations ── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@keyframes launcher-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(108,138,255,0.35); }
+  50% { box-shadow: 0 0 0 10px rgba(108,138,255,0); }
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-5px); opacity: 1; }
+}
+
+@media (max-width: 480px) {
+  .page { display: none; }
+  .panel {
+    right: 12px; left: 12px;
+    bottom: 88px;
+    width: auto;
+    border-radius: 20px;
+  }
+  .launcher { right: 16px; bottom: 16px; }
+  .chip-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Landing -->
+<main class="page">
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Atlas · Active
+    </div>
+    <h1>Atlas</h1>
+    <p>Your AI memory layer. Ask anything about your PC activity, browsing history, and daily patterns — all answered from local data.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-val" id="stat-logs">—</div>
+        <div class="stat-label">Logs Captured</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="stat-apps">—</div>
+        <div class="stat-label">Apps Tracked</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" id="stat-days">—</div>
+        <div class="stat-label">Days of Memory</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Floating Panel -->
+<div class="panel" id="panel" role="dialog" aria-label="Atlas AI Assistant">
+  <header class="panel-header">
+    <div class="avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(108,138,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/>
+        <circle cx="9" cy="13" r="1" fill="rgba(108,138,255,0.9)" stroke="none"/>
+        <circle cx="15" cy="13" r="1" fill="rgba(108,138,255,0.9)" stroke="none"/>
+      </svg>
+    </div>
+    <div class="header-info">
+      <div class="header-name">Atlas</div>
+      <div class="header-status">
+        <span class="status-dot"></span>
+        <span>Connected to local memory</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="clearBtn" title="Clear chat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+      </button>
+      <button class="icon-btn" id="closeBtn" title="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="chat-area" id="chatArea">
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(108,138,255,0.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/>
+        </svg>
+      </div>
+      <h3>What did you do today?</h3>
+      <p>Ask me anything about your PC activity, browsing sessions, or daily patterns.</p>
+      <div class="chip-grid">
+        <button class="chip" data-q="What was I doing today?">📅 What was I doing today?</button>
+        <button class="chip" data-q="What websites did I visit yesterday?">🌐 Yesterday's websites</button>
+        <button class="chip" data-q="Summarize my day">📝 Summarize my day</button>
+        <button class="chip" data-q="What was I coding recently?">💻 Recent coding sessions</button>
+      </div>
+    </div>
+    <div class="msgs" id="msgs"></div>
+  </div>
+
+  <form class="composer" id="form">
+    <textarea
+      id="input"
+      placeholder="Ask Atlas anything…"
+      rows="1"
+      aria-label="Ask Atlas"
+    ></textarea>
+    <button class="send-btn" id="sendBtn" type="submit" aria-label="Send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+      </svg>
+    </button>
+  </form>
+</div>
+
+<!-- Launcher -->
+<button class="launcher" id="launcher" aria-label="Open Atlas">
+  <span class="launcher-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(180,200,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/>
+      <circle cx="9" cy="13" r="1" fill="rgba(180,200,255,0.9)" stroke="none"/>
+      <circle cx="15" cy="13" r="1" fill="rgba(180,200,255,0.9)" stroke="none"/>
+    </svg>
+  </span>
+  <span class="launcher-close" aria-hidden="true">✕</span>
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="atlas.js"></script>
+<script>
+const panel = document.getElementById('panel');
+const launcher = document.getElementById('launcher');
+const closeBtn = document.getElementById('closeBtn');
+const clearBtn = document.getElementById('clearBtn');
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const sendBtn = document.getElementById('sendBtn');
+const chatArea = document.getElementById('chatArea');
+const msgs = document.getElementById('msgs');
+const welcome = document.getElementById('welcome');
+let busy = false;
+
+function open() {
+  panel.classList.add('open');
+  launcher.classList.add('open');
+  setTimeout(() => input.focus(), 200);
+}
+
+function close() {
+  panel.classList.remove('open');
+  launcher.classList.remove('open');
+}
+
+launcher.addEventListener('click', () => panel.classList.contains('open') ? close() : open());
+closeBtn.addEventListener('click', close);
+
+clearBtn.addEventListener('click', () => {
+  msgs.innerHTML = '';
+  welcome.classList.remove('gone');
+});
+
+input.addEventListener('input', () => {
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+});
+
+input.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    submit(input.value);
+  }
+});
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  submit(input.value);
+});
+
+document.querySelectorAll('.chip').forEach(c => {
+  c.addEventListener('click', () => submit(c.dataset.q));
+});
+
+function scrollBottom() {
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function addMsg(role, text, extra) {
+  welcome.classList.add('gone');
+  const el = document.createElement('div');
+  el.className = ['msg', role, extra].filter(Boolean).join(' ');
+  if (role === 'ai' && typeof marked !== 'undefined') {
+    el.innerHTML = marked.parse(text);
+} else {
+    el.textContent = text;
+}
+  msgs.appendChild(el);
+  scrollBottom();
+  return el;
+}
+
+function addTyping() {
+  welcome.classList.add('gone');
+  const el = document.createElement('div');
+  el.className = 'typing-indicator';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  msgs.appendChild(el);
+  scrollBottom();
+  return el;
+}
+
+async function typeText(el, text) {
+
+  const clean = text || 'No response returned.';
+
+  if (typeof marked !== 'undefined') {
+      el.innerHTML = marked.parse(clean);
+  } else {
+      el.textContent = clean;
+  }
+
+  scrollBottom();
+}
+
+async function submit(question) {
+  const q = (question || '').trim();
+  if (!q || busy) return;
+  open();
+  addMsg('user', q);
+  input.value = '';
+  input.style.height = 'auto';
+  busy = true;
+  sendBtn.disabled = true;
+  const typing = addTyping();
+  try {
+    const res = await fetch('http://127.0.0.1:5000/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: q })
+    });
+    const data = await res.json();
+    typing.remove();
+    if (!res.ok || data.status !== 'success') throw new Error(data.message || 'Atlas could not answer that.');
+    const aiMsg = addMsg('ai', '');
+    await typeText(aiMsg, data.answer);
+  } catch (err) {
+    typing.remove();
+    addMsg('ai', 'Error: ' + err.message, 'err');
+  } finally {
+    busy = false;
+    sendBtn.disabled = false;
+    input.focus();
+  }
+}
+
+/* Fetch stats from backend */
+async function loadStats() {
+  try {
+    const res = await fetch('http://127.0.0.1:5000/stats');
+    if (!res.ok) return;
+    const d = await res.json();
+    if (d.total_logs) document.getElementById('stat-logs').textContent = d.total_logs.toLocaleString();
+    if (d.unique_apps) document.getElementById('stat-apps').textContent = d.unique_apps;
+    if (d.days_tracked) document.getElementById('stat-days').textContent = d.days_tracked;
+  } catch {}
+}
+
+loadStats();
+</script>
+</body>
+</html>

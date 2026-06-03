@@ -13,8 +13,8 @@ insert_activity(
     "2026-05-31T10:00:00",
     "Code.exe",
     "VS Code",
-    "ocr",
-    text
+    source="ocr",
+    ocr_text=text
 )
 
 activities = get_all_activities()

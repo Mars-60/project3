@@ -1,120 +1,44 @@
-from backend.agents.pdf_summary_agent import (
-    summarize_pdf_learning
-)
-
-from backend.agents.smart_memory_agent import (
-    ask_memory
-)
-
 from backend.ai.gemini_client import (
     ask_gemini
 )
 
-from backend.retrieval.time_retriever import (
-    retrieve_by_time
+from backend.retrieval.memory_context_builder import (
+    build_memory_context
 )
 
-
-STUDY_KEYWORDS = (
-    "study",
-    "studying",
-    "learned",
-    "reading",
-    "read",
-    "pdf"
+from backend.retrieval.memory_retriever import (
+    retrieve_memory_package
 )
-
-
-def is_study_question(question):
-    question = question.lower()
-
-    for keyword in STUDY_KEYWORDS:
-        if keyword in question:
-            return True
-
-    return False
-
-
-def build_activity_context(activities):
-    if not activities:
-        return (
-            "No matching activity logs found."
-        )
-
-    context = []
-
-    for activity in activities:
-        timestamp = activity[1]
-        app_name = activity[2]
-        window_title = activity[3]
-        url = activity[4]
-        source = activity[7]
-
-        line = (
-            f"[{timestamp}] "
-            f"{app_name} | "
-            f"{window_title}"
-        )
-
-        if url:
-            line += (
-                f" | {url}"
-            )
-
-        line += (
-            f" | {source}"
-        )
-
-        context.append(
-            line
-        )
-
-    return "\n".join(
-        context
-    )
 
 
 def answer_memory_question(question):
-    if not is_study_question(
-        question
-    ):
-        return ask_memory(
-            question
-        )
-
-    activities = retrieve_by_time(
+    memory_package = retrieve_memory_package(
         question
     )
 
-    activity_context = build_activity_context(
-        activities
+    memory_context = build_memory_context(
+        memory_package
     )
-
-    pdf_summary = summarize_pdf_learning()
 
     prompt = f"""
-You are PersonalOS AI.
+You are Atlas, the memory reasoning layer for PersonalOS AI.
 
-The user asked a memory question related to studying,
-reading, learning, or PDFs.
+Use the memory context as evidence.
+Do not invent activities, websites, files, PDFs, or screen contents.
+Do not expose raw database implementation details.
 
-Use both sources below to answer the question.
-
-Activity Context:
-
-{activity_context}
-
-PDF Learning Summary:
-
-{pdf_summary}
+Infer the answer naturally from the evidence when possible.
+If the evidence is weak or missing, say what is missing.
 
 Question:
 
 {question}
 
-Generate one concise final answer.
-If one source is missing information, say that clearly.
-Do not invent details.
+Memory Context:
+
+{memory_context}
+
+Answer concisely and helpfully.
 """
 
     return ask_gemini(

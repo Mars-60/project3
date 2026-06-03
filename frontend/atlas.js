@@ -36,7 +36,11 @@ function addMessage(role, text, extraClass = "") {
     const message = document.createElement("div");
 
     message.className = ["message", role, extraClass].filter(Boolean).join(" ");
+    if (role === "assistant") {
+    message.innerHTML = marked.parse(text);
+} else {
     message.textContent = text;
+}
 
     messages.appendChild(message);
     scrollToBottom();
@@ -62,20 +66,27 @@ function autoResizeInput() {
 }
 
 async function animateAssistantResponse(text) {
-    const message = addMessage("assistant", "");
-    const cleanText = text || "No answer returned.";
-    const step = cleanText.length > 220 ? 4 : 2;
 
-    for (let index = 0; index < cleanText.length; index += step) {
-        message.textContent = cleanText.slice(0, index + step);
+    const message = addMessage("assistant", "");
+
+    const cleanText = text || "No answer returned.";
+
+    let displayed = "";
+
+    for (const char of cleanText) {
+
+        displayed += char;
+
+        message.innerHTML = marked.parse(displayed);
+
         scrollToBottom();
 
         await new Promise((resolve) => {
-            window.setTimeout(resolve, 12);
+            setTimeout(resolve, 8);
         });
     }
 
-    message.textContent = cleanText;
+    message.innerHTML = marked.parse(cleanText);
 }
 
 async function sendQuestion(question) {
