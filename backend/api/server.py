@@ -9,6 +9,11 @@ app = Flask(__name__)
 
 CORS(app)
 
+from backend.database.db import (
+    insert_activity,
+    get_connection,
+    get_recent_activities
+)
 
 @app.route(
     "/browser_activity",
@@ -110,6 +115,39 @@ def chat():
             }
         ), 500
 
+@app.route("/stats")
+def stats():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT COUNT(*) FROM activity_logs"
+    )
+    total_logs = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(DISTINCT app_name) FROM activity_logs"
+    )
+    unique_apps = cursor.fetchone()[0]
+
+    cursor.execute(
+        "SELECT COUNT(DISTINCT DATE(timestamp)) FROM activity_logs"
+    )
+    memory_days = cursor.fetchone()[0]
+
+    conn.close()
+
+    return jsonify({
+        "logs": total_logs,
+        "apps": unique_apps,
+        "days": memory_days
+    })
+@app.route("/recent", methods=["GET"])
+def recent():
+    limit = request.args.get("limit", 60, type=int)
+    activities = get_recent_activities(limit)
+    return jsonify({"activities": [list(a) for a in activities]})
 
 if __name__ == "__main__":
 

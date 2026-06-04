@@ -6,768 +6,814 @@
 <title>Atlas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #07080f;
-  --surface: #0d0f1a;
-  --surface-2: #13162a;
-  --surface-3: #1a1e35;
-  --border: rgba(255,255,255,0.07);
-  --border-hover: rgba(255,255,255,0.14);
-  --text: #f0f2ff;
-  --muted: #7e85a3;
-  --soft: #b8bdd6;
-  --accent: #6c8aff;
-  --accent-glow: rgba(108,138,255,0.18);
-  --accent-2: #a78bfa;
-  --green: #34d399;
-  --green-dim: rgba(52,211,153,0.12);
+  --bg: #060710;
+  --surface: #0f1120;
+  --surface2: #151829;
+  --surface3: #1c2038;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.1);
+  --text: #eef0ff;
+  --muted: #6b7299;
+  --soft: #a8b0d0;
+  --accent: #5b7fff;
+  --accent-dim: rgba(91,127,255,0.15);
+  --accent-glow: rgba(91,127,255,0.25);
+  --purple: #9b7fff;
+  --green: #2dd4a0;
+  --green-dim: rgba(45,212,160,0.12);
+  --amber: #f5a623;
+  --amber-dim: rgba(245,166,35,0.12);
+  --red: #ff5f7e;
+  --sidebar-w: 220px;
+  --header-h: 60px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);}
+body{background:radial-gradient(ellipse 80% 60% at -10% -10%,rgba(91,127,255,0.07) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 110% 100%,rgba(155,127,255,0.06) 0%,transparent 50%),var(--bg);}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:99px;}
+*{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}
+
+/* ── SHELL ── */
+.shell{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:var(--header-h) 1fr;height:100vh;overflow:hidden;}
+
+/* ── TOPBAR ── */
+.topbar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:rgba(6,7,16,0.85);backdrop-filter:blur(24px);z-index:10;}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;box-shadow:0 0 16px rgba(91,127,255,0.4);}
+.logo-name{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text);}
+.topbar-divider{width:1px;height:20px;background:var(--border2);margin:0 4px;}
+.status-pill{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--green-dim);border:1px solid rgba(45,212,160,0.2);border-radius:99px;font-size:11px;color:var(--green);font-weight:500;}
+.status-pill .dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease-in-out infinite;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.topbar-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);}
+.icon-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 150ms;}
+.icon-btn:hover{background:var(--surface2);border-color:var(--border2);color:var(--text);}
+.icon-btn svg{width:15px;height:15px;}
+
+/* ── SIDEBAR ── */
+.sidebar{border-right:1px solid var(--border);background:rgba(9,11,22,0.6);display:flex;flex-direction:column;overflow-y:auto;padding:16px 12px;gap:2px;}
+.nav-section-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;padding:12px 8px 6px;margin-top:8px;}
+.nav-section-label:first-child{margin-top:0;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;cursor:pointer;color:var(--muted);font-size:13.5px;transition:all 150ms;border:1px solid transparent;background:transparent;text-align:left;width:100%;font-family:'DM Sans',sans-serif;}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;}
+.nav-item:hover{color:var(--soft);background:var(--surface2);}
+.nav-item.active{color:var(--text);background:var(--accent-dim);border-color:rgba(91,127,255,0.2);}
+.nav-item .badge{margin-left:auto;font-size:10px;font-family:'DM Mono',monospace;background:var(--surface3);padding:1px 6px;border-radius:99px;color:var(--muted);}
+.sidebar-footer{margin-top:auto;padding-top:16px;border-top:1px solid var(--border);}
+.version-tag{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);padding:4px 8px;}
+
+/* ── MAIN ── */
+.main{overflow-y:auto;display:flex;flex-direction:column;}
+.view{display:none;flex-direction:column;flex:1;min-height:0;}
+.view.active{display:flex;}
+
+/* ── HOME VIEW ── */
+.home-view{
+  display:none;flex-direction:column;
+  height:100%;overflow:hidden;position:relative;
+}
+.home-view.active{display:flex;}
+
+.home-bg-orbs{position:absolute;inset:0;pointer-events:none;z-index:0;}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.18;}
+.orb1{width:500px;height:500px;background:radial-gradient(circle,#5b7fff,transparent);top:-100px;left:-100px;}
+.orb2{width:400px;height:400px;background:radial-gradient(circle,#9b7fff,transparent);bottom:-80px;right:-80px;}
+.orb3{width:300px;height:300px;background:radial-gradient(circle,#2dd4a0,transparent);top:50%;right:20%;transform:translateY(-50%);}
+
+.home-content{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  height:100%;padding:40px;text-align:center;gap:0;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.home-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 14px 5px 10px;
+  background:rgba(91,127,255,0.1);
+  border:1px solid rgba(91,127,255,0.22);
+  border-radius:99px;font-size:11px;font-weight:500;
+  color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;
+  margin-bottom:28px;
+  animation:fadeInUp 600ms ease both;
+}
+.home-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s ease-in-out infinite;}
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-  background: var(--bg);
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text);
+.home-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(72px,10vw,110px);
+  font-weight:800;letter-spacing:-0.04em;line-height:0.95;
+  background:linear-gradient(135deg,#fff 20%,#8ba4ff 55%,#b09fff 80%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:20px;
+  animation:fadeInUp 600ms 100ms ease both;
 }
 
-body {
-  background:
-    radial-gradient(ellipse 60% 50% at 15% 20%, rgba(108,138,255,0.08) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 85% 80%, rgba(167,139,250,0.07) 0%, transparent 60%),
-    var(--bg);
+.home-sub{
+  font-size:16px;color:var(--muted);line-height:1.7;
+  max-width:440px;font-weight:300;
+  margin-bottom:40px;
+  animation:fadeInUp 600ms 200ms ease both;
 }
 
-/* ── Landing card ── */
-.page {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  padding: 32px;
+.home-stats{
+  display:flex;justify-content:center;gap:0;
+  margin-bottom:44px;
+  border:1px solid var(--border2);border-radius:16px;
+  overflow:hidden;background:rgba(15,17,32,0.6);backdrop-filter:blur(20px);
+  animation:fadeInUp 600ms 300ms ease both;
 }
-
-.hero {
-  max-width: 500px;
-  text-align: center;
+.home-stat{
+  padding:20px 32px;text-align:center;position:relative;
 }
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px 5px 8px;
-  background: var(--accent-glow);
-  border: 1px solid rgba(108,138,255,0.25);
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 24px;
+.home-stat:not(:last-child)::after{
+  content:'';position:absolute;right:0;top:20%;height:60%;
+  width:1px;background:var(--border2);
 }
+.home-stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--text);line-height:1;}
+.home-stat-label{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.06em;}
 
-.hero-badge .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 6px var(--green);
-  animation: blink 2s ease-in-out infinite;
+.home-actions{
+  display:flex;gap:12px;
+  animation:fadeInUp 600ms 400ms ease both;
 }
-
-.hero h1 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(52px, 8vw, 76px);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  background: linear-gradient(135deg, #fff 30%, #7c8fff 70%, #a78bfa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 16px;
+.btn-primary{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:12px;border:none;
+  background:linear-gradient(135deg,#3a5bff,#6c4dff);
+  color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all 180ms;
+  box-shadow:0 4px 20px rgba(58,91,255,0.35);
 }
-
-.hero p {
-  font-size: 16px;
-  color: var(--muted);
-  line-height: 1.65;
-  font-weight: 300;
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(58,91,255,0.45);}
+.btn-primary svg{width:16px;height:16px;}
+.btn-ghost{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 24px;border-radius:12px;
+  border:1px solid var(--border2);
+  background:rgba(255,255,255,0.04);
+  color:var(--soft);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;
+  cursor:pointer;transition:all 180ms;
 }
+.btn-ghost:hover{background:rgba(255,255,255,0.08);border-color:rgba(91,127,255,0.3);color:var(--text);}
+.btn-ghost svg{width:16px;height:16px;}
 
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  gap: 32px;
-  margin-top: 36px;
-  padding-top: 36px;
-  border-top: 1px solid var(--border);
+.home-scroll-hint{
+  position:absolute;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:var(--muted);font-size:11px;
+  animation:fadeInUp 600ms 700ms ease both;
+  cursor:pointer;transition:color 150ms;
 }
+.home-scroll-hint:hover{color:var(--soft);}
+.scroll-arrow{animation:scrollBounce 2s ease-in-out infinite;}
+.scroll-arrow svg{width:16px;height:16px;}
 
-.stat {
-  text-align: center;
-}
+/* ── PAGE HEADER ── */
+.page-header{display:flex;align-items:center;gap:12px;padding:24px 28px 0;flex-shrink:0;}
+.page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--text);}
+.page-sub{font-size:13px;color:var(--muted);margin-top:2px;}
 
-.stat-val {
-  font-family: 'Syne', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-}
+/* ── DASHBOARD GRID ── */
+.dashboard-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px 28px 28px;overflow-y:auto;flex:1;}
 
-.stat-label {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 3px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;transition:border-color 200ms;}
+.stat-card:hover{border-color:var(--border2);}
+.stat-card-top{display:flex;align-items:center;gap:10px;}
+.stat-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.stat-icon svg{width:16px;height:16px;}
+.stat-icon.blue{background:var(--accent-dim);color:var(--accent);}
+.stat-icon.green{background:var(--green-dim);color:var(--green);}
+.stat-icon.amber{background:var(--amber-dim);color:var(--amber);}
+.stat-label{font-size:12px;color:var(--muted);}
+.stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--text);line-height:1;}
+.stat-delta{font-size:11px;color:var(--muted);}
 
-/* ── Launcher ── */
-.launcher {
-  position: fixed;
-  right: 28px;
-  bottom: 28px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 1px solid rgba(108,138,255,0.3);
-  background: linear-gradient(145deg, rgba(108,138,255,0.25), rgba(167,139,250,0.15));
-  backdrop-filter: blur(20px);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 0 0 0 rgba(108,138,255,0.4);
-  animation: launcher-pulse 3s ease-in-out infinite;
-}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;grid-column:span 2;}
+.card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--text);}
+.card-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.bar{width:100%;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,var(--accent) 0%,rgba(91,127,255,0.3) 100%);transition:opacity 200ms;min-height:4px;}
+.bar:hover{opacity:0.8;}
+.bar-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);}
 
-.launcher:hover {
-  transform: scale(1.08);
-  border-color: rgba(108,138,255,0.6);
-  box-shadow: 0 0 28px rgba(108,138,255,0.3), 0 8px 32px rgba(0,0,0,0.4);
-  animation: none;
-}
+.app-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;}
+.app-row{display:flex;align-items:center;gap:10px;}
+.app-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.app-name{font-size:13px;color:var(--soft);flex:1;}
+.app-pct{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);}
+.app-bar-track{height:3px;background:var(--surface3);border-radius:99px;overflow:hidden;margin-top:2px;}
+.app-bar-fill{height:100%;border-radius:99px;}
 
-.launcher:active { transform: scale(0.96); }
+.timeline-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;grid-column:span 3;display:flex;flex-direction:column;gap:14px;overflow:hidden;}
+.timeline-scroll{overflow-y:auto;display:flex;flex-direction:column;gap:2px;max-height:220px;}
+.tl-item{display:flex;align-items:flex-start;gap:12px;padding:9px 10px;border-radius:10px;transition:background 150ms;cursor:default;}
+.tl-item:hover{background:var(--surface2);}
+.tl-time{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);flex-shrink:0;width:68px;padding-top:1px;}
+.tl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.tl-content{flex:1;min-width:0;}
+.tl-app{font-size:12px;font-weight:500;color:var(--text);}
+.tl-title{font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tl-source-chip{font-size:10px;font-family:'DM Mono',monospace;padding:2px 7px;border-radius:99px;flex-shrink:0;margin-top:3px;}
+.tl-source-chip.window{background:var(--accent-dim);color:var(--accent);}
+.tl-source-chip.browser{background:var(--green-dim);color:var(--green);}
+.tl-source-chip.ocr{background:var(--amber-dim);color:var(--amber);}
 
-.launcher-icon {
-  width: 26px;
-  height: 26px;
-  position: relative;
-  transition: opacity 200ms;
-}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;gap:8px;color:var(--muted);font-size:13px;text-align:center;}
+.empty-state svg{width:32px;height:32px;opacity:0.3;margin-bottom:4px;}
 
-.launcher-icon svg { width: 100%; height: 100%; }
+/* ── ACTIVITY VIEW ── */
+.activity-layout{display:grid;grid-template-columns:1fr 300px;gap:16px;padding:20px 28px 28px;flex:1;overflow:hidden;}
+.activity-feed{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;}
+.feed-header{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.feed-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;}
+.feed-count{font-family:'DM Mono',monospace;font-size:11px;background:var(--surface3);padding:2px 8px;border-radius:99px;color:var(--muted);}
+.feed-search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;}
+.feed-search input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);width:140px;}
+.feed-search input::placeholder{color:var(--muted);}
+.feed-search svg{width:13px;height:13px;color:var(--muted);flex-shrink:0;}
+.feed-list{overflow-y:auto;flex:1;}
+.feed-item{display:flex;align-items:flex-start;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border);transition:background 150ms;}
+.feed-item:last-child{border-bottom:none;}
+.feed-item:hover{background:var(--surface2);}
+.feed-item-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;margin-top:1px;}
+.feed-item-body{flex:1;min-width:0;}
+.feed-item-app{font-size:13px;font-weight:500;color:var(--text);}
+.feed-item-title{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.feed-item-url{font-size:11px;color:var(--accent);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'DM Mono',monospace;}
+.feed-item-meta{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.feed-item-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+.activity-aside{display:flex;flex-direction:column;gap:12px;overflow-y:auto;}
+.aside-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;flex-shrink:0;}
+.aside-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;margin-bottom:12px;}
+.app-usage-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.app-usage-row:last-child{margin-bottom:0;}
+.usage-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.usage-info{flex:1;min-width:0;}
+.usage-name{font-size:12px;color:var(--soft);}
+.usage-bar-wrap{display:flex;align-items:center;gap:6px;margin-top:3px;}
+.usage-track{flex:1;height:3px;background:var(--surface3);border-radius:99px;overflow:hidden;}
+.usage-fill{height:100%;border-radius:99px;}
+.usage-pct{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);width:28px;text-align:right;}
 
-.launcher.open .launcher-icon { opacity: 0; transform: scale(0.5); }
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:6px;}
 
-.launcher-close {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: scale(0.5);
-  transition: all 200ms;
-  font-size: 18px;
-  color: var(--text);
-}
+/* ── FLOATING CHAT ── */
+.launcher{position:fixed;right:24px;bottom:24px;width:52px;height:52px;border-radius:50%;border:1px solid rgba(91,127,255,0.35);background:linear-gradient(145deg,rgba(91,127,255,0.28),rgba(155,127,255,0.18));backdrop-filter:blur(20px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 220ms cubic-bezier(0.34,1.56,0.64,1);animation:launcher-pulse 3s ease-in-out infinite;z-index:100;}
+.launcher:hover{transform:scale(1.1);border-color:rgba(91,127,255,0.6);box-shadow:0 0 26px rgba(91,127,255,0.35),0 8px 28px rgba(0,0,0,0.4);animation:none;}
+.launcher:active{transform:scale(0.95);}
+.launcher svg{width:22px;height:22px;transition:all 200ms;}
+.launcher .icon-open{opacity:1;transform:scale(1);position:absolute;}
+.launcher .icon-close{opacity:0;transform:scale(0.4) rotate(-45deg);position:absolute;}
+.launcher.open .icon-open{opacity:0;transform:scale(0.4) rotate(45deg);}
+.launcher.open .icon-close{opacity:1;transform:scale(1) rotate(0deg);}
+.launcher.open{animation:none;}
 
-.launcher.open .launcher-close { opacity: 1; transform: scale(1); }
+.chat-panel{position:fixed;right:24px;bottom:90px;width:min(400px,calc(100vw - 24px));height:min(600px,calc(100vh - 110px));display:flex;flex-direction:column;background:rgba(9,11,22,0.93);border:1px solid var(--border2);border-radius:22px;overflow:hidden;backdrop-filter:blur(32px) saturate(160%);box-shadow:0 0 0 1px rgba(255,255,255,0.04) inset,0 28px 72px rgba(0,0,0,0.65),0 0 50px rgba(91,127,255,0.06);opacity:0;pointer-events:none;transform:translateY(14px) scale(0.97);transform-origin:bottom right;transition:opacity 230ms cubic-bezier(0.16,1,0.3,1),transform 230ms cubic-bezier(0.16,1,0.3,1);z-index:99;}
+.chat-panel.open{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+.chat-header{display:flex;align-items:center;gap:10px;padding:16px 18px 14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);flex-shrink:0;}
+.chat-avatar{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,rgba(91,127,255,0.4),rgba(155,127,255,0.3));border:1px solid rgba(91,127,255,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.chat-avatar svg{width:16px;height:16px;}
+.chat-hname{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.chat-hstatus{font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px;margin-top:1px;}
+.chat-hstatus .dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);animation:blink 2s ease-in-out infinite;}
+.chat-hactions{margin-left:auto;display:flex;gap:5px;}
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+.welcome-inner{display:flex;flex-direction:column;align-items:center;text-align:center;padding:12px 8px;margin:auto;}
+.welcome-inner.gone{display:none;}
+.welcome-orb{width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,rgba(91,127,255,0.3),rgba(155,127,255,0.2));border:1px solid rgba(91,127,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.welcome-orb svg{width:24px;height:24px;}
+.welcome-inner h4{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px;}
+.welcome-inner p{font-size:12px;color:var(--muted);line-height:1.6;max-width:260px;margin-bottom:16px;}
+.chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;width:100%;}
+.chip{padding:8px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:11.5px;color:var(--soft);text-align:left;cursor:pointer;transition:all 140ms;font-family:'DM Sans',sans-serif;line-height:1.4;}
+.chip:hover{background:var(--surface3);border-color:rgba(91,127,255,0.3);color:var(--text);transform:translateY(-1px);}
+.msgs-list{display:flex;flex-direction:column;gap:8px;}
+.msg{max-width:88%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.6;white-space:pre-wrap;animation:msgIn 200ms cubic-bezier(0.16,1,0.3,1) both;}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,#3a5bff,#6c4dff);color:#fff;border-bottom-right-radius:4px;box-shadow:0 4px 16px rgba(58,91,255,0.25);}
+.msg.ai{align-self:flex-start;background:var(--surface2);border:1px solid var(--border);color:var(--soft);border-bottom-left-radius:4px;}
+.msg.ai strong{color:var(--text);}
+.msg.ai ul{padding-left:16px;margin:6px 0;}
+.msg.ai li{margin-bottom:3px;}
+.msg.ai code{background:var(--surface3);padding:1px 5px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;}
+.msg.err{background:rgba(255,95,126,0.1);border:1px solid rgba(255,95,126,0.2);color:#ffaab8;}
+.typing-ind{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;border-bottom-left-radius:4px;}
+.typing-ind span{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:bounce 1s ease-in-out infinite;}
+.typing-ind span:nth-child(2){animation-delay:0.14s;}
+.typing-ind span:nth-child(3){animation-delay:0.28s;}
+.chat-composer{display:flex;align-items:flex-end;gap:8px;padding:12px 14px;border-top:1px solid var(--border);background:rgba(255,255,255,0.01);flex-shrink:0;}
+.chat-composer textarea{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);resize:none;outline:none;min-height:42px;max-height:110px;line-height:1.5;transition:border-color 150ms,box-shadow 150ms;}
+.chat-composer textarea::placeholder{color:var(--muted);}
+.chat-composer textarea:focus{border-color:rgba(91,127,255,0.45);box-shadow:0 0 0 3px rgba(91,127,255,0.08);}
+.send-btn{width:42px;height:42px;border-radius:11px;border:none;background:linear-gradient(135deg,#3a5bff,#6c4dff);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 150ms;box-shadow:0 4px 12px rgba(58,91,255,0.3);}
+.send-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 18px rgba(58,91,255,0.4);}
+.send-btn:disabled{opacity:0.4;cursor:not-allowed;box-shadow:none;}
+.send-btn svg{width:16px;height:16px;}
 
-/* ── Panel ── */
-.panel {
-  position: fixed;
-  right: 28px;
-  bottom: 104px;
-  width: min(420px, calc(100vw - 24px));
-  height: min(640px, calc(100vh - 140px));
-  display: flex;
-  flex-direction: column;
-  background: rgba(10, 12, 22, 0.88);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  overflow: hidden;
-  backdrop-filter: blur(32px) saturate(150%);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04) inset,
-    0 32px 80px rgba(0,0,0,0.6),
-    0 0 60px rgba(108,138,255,0.06);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(16px) scale(0.97);
-  transform-origin: bottom right;
-  transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
-}
+/* ── ANIMATIONS ── */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes launcher-pulse{0%,100%{box-shadow:0 0 0 0 rgba(91,127,255,0.4)}50%{box-shadow:0 0 0 10px rgba(91,127,255,0)}}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.35}40%{transform:translateY(-5px);opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes scrollBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 
-.panel.open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-}
-
-/* ── Header ── */
-.panel-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 18px 20px 16px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-  background: rgba(255,255,255,0.02);
-}
-
-.avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, rgba(108,138,255,0.4), rgba(167,139,250,0.3));
-  border: 1px solid rgba(108,138,255,0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.avatar svg { width: 18px; height: 18px; }
-
-.header-info { flex: 1; min-width: 0; }
-
-.header-name {
-  font-family: 'Syne', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.2;
-}
-
-.header-status {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: var(--green);
-  margin-top: 2px;
-}
-
-.status-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 5px var(--green);
-  animation: blink 2s ease-in-out infinite;
-}
-
-.header-actions { display: flex; gap: 6px; }
-
-.icon-btn {
-  width: 30px; height: 30px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 150ms;
-  font-size: 14px;
-}
-
-.icon-btn:hover {
-  background: var(--surface-2);
-  border-color: var(--border-hover);
-  color: var(--text);
-}
-
-/* ── Scroll area ── */
-.chat-area {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  padding: 20px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.1) transparent;
-}
-
-.chat-area::-webkit-scrollbar { width: 4px; }
-.chat-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 99px; }
-
-/* ── Welcome ── */
-.welcome {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 16px 8px;
-  gap: 0;
-}
-
-.welcome.gone { display: none; }
-
-.welcome-icon {
-  width: 56px; height: 56px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, rgba(108,138,255,0.3), rgba(167,139,250,0.2));
-  border: 1px solid rgba(108,138,255,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 14px;
-}
-
-.welcome-icon svg { width: 26px; height: 26px; }
-
-.welcome h3 {
-  font-family: 'Syne', sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
-}
-
-.welcome p {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.6;
-  max-width: 280px;
-  margin-bottom: 22px;
-  font-weight: 300;
-}
-
-.chip-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.chip {
-  padding: 10px 12px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  font-size: 12px;
-  color: var(--soft);
-  text-align: left;
-  cursor: pointer;
-  transition: all 150ms;
-  line-height: 1.4;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.chip:hover {
-  background: var(--surface-3);
-  border-color: rgba(108,138,255,0.3);
-  color: var(--text);
-  transform: translateY(-1px);
-}
-
-/* ── Messages ── */
-.msgs { display: flex; flex-direction: column; gap: 10px; }
-
-.msg {
-  max-width: 86%;
-  padding: 11px 14px;
-  border-radius: 16px;
-  font-size: 13.5px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  animation: msgIn 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.msg.user {
-  align-self: flex-end;
-  background: linear-gradient(135deg, #3a5bff, #6c4dff);
-  color: #fff;
-  border-bottom-right-radius: 5px;
-  box-shadow: 0 4px 20px rgba(58,91,255,0.25);
-}
-
-.msg.ai {
-  align-self: flex-start;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--soft);
-  border-bottom-left-radius: 5px;
-}
-
-.msg.err {
-  background: rgba(239,68,68,0.1);
-  border-color: rgba(239,68,68,0.2);
-  color: #fca5a5;
-}
-
-.typing-indicator {
-  align-self: flex-start;
-  display: flex;
-  gap: 5px;
-  padding: 13px 16px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  border-bottom-left-radius: 5px;
-}
-
-.typing-indicator span {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: bounce 1s ease-in-out infinite;
-}
-
-.typing-indicator span:nth-child(2) { animation-delay: 0.15s; }
-.typing-indicator span:nth-child(3) { animation-delay: 0.3s; }
-
-/* ── Composer ── */
-.composer {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  padding: 14px 16px;
-  border-top: 1px solid var(--border);
-  background: rgba(255,255,255,0.015);
-  flex-shrink: 0;
-}
-
-.composer textarea {
-  flex: 1;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 11px 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13.5px;
-  color: var(--text);
-  resize: none;
-  outline: none;
-  min-height: 44px;
-  max-height: 120px;
-  line-height: 1.5;
-  transition: border-color 150ms, box-shadow 150ms;
-  overflow-y: auto;
-}
-
-.composer textarea::placeholder { color: var(--muted); }
-
-.composer textarea:focus {
-  border-color: rgba(108,138,255,0.45);
-  box-shadow: 0 0 0 3px rgba(108,138,255,0.08);
-}
-
-.send-btn {
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #3a5bff, #6c4dff);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 150ms;
-  box-shadow: 0 4px 14px rgba(58,91,255,0.3);
-}
-
-.send-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(58,91,255,0.4);
-}
-
-.send-btn:active:not(:disabled) { transform: translateY(0); }
-
-.send-btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.send-btn svg { width: 18px; height: 18px; }
-
-/* ── Animations ── */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-
-@keyframes launcher-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(108,138,255,0.35); }
-  50% { box-shadow: 0 0 0 10px rgba(108,138,255,0); }
-}
-
-@keyframes msgIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes bounce {
-  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-  40% { transform: translateY(-5px); opacity: 1; }
-}
-
-@media (max-width: 480px) {
-  .page { display: none; }
-  .panel {
-    right: 12px; left: 12px;
-    bottom: 88px;
-    width: auto;
-    border-radius: 20px;
-  }
-  .launcher { right: 16px; bottom: 16px; }
-  .chip-grid { grid-template-columns: 1fr; }
+@media(max-width:900px){
+  .shell{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .dashboard-grid{grid-template-columns:1fr 1fr;}
+  .timeline-card{grid-column:span 2;}
+  .activity-layout{grid-template-columns:1fr;}
+  .activity-aside{display:none;}
 }
 </style>
 </head>
 <body>
 
-<!-- Landing -->
-<main class="page">
-  <div class="hero">
-    <div class="hero-badge">
+<div class="shell">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="logo" onclick="switchView('home')">
+      <div class="logo-mark">A</div>
+      <span class="logo-name">Atlas</span>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="status-pill">
       <span class="dot"></span>
-      Atlas · Active
+      Collecting
     </div>
-    <h1>Atlas</h1>
-    <p>Your AI memory layer. Ask anything about your PC activity, browsing history, and daily patterns — all answered from local data.</p>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-val" id="stat-logs">—</div>
-        <div class="stat-label">Logs Captured</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val" id="stat-apps">—</div>
-        <div class="stat-label">Apps Tracked</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val" id="stat-days">—</div>
-        <div class="stat-label">Days of Memory</div>
-      </div>
-    </div>
-  </div>
-</main>
-
-<!-- Floating Panel -->
-<div class="panel" id="panel" role="dialog" aria-label="Atlas AI Assistant">
-  <header class="panel-header">
-    <div class="avatar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(108,138,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/>
-        <circle cx="9" cy="13" r="1" fill="rgba(108,138,255,0.9)" stroke="none"/>
-        <circle cx="15" cy="13" r="1" fill="rgba(108,138,255,0.9)" stroke="none"/>
-      </svg>
-    </div>
-    <div class="header-info">
-      <div class="header-name">Atlas</div>
-      <div class="header-status">
-        <span class="status-dot"></span>
-        <span>Connected to local memory</span>
-      </div>
-    </div>
-    <div class="header-actions">
-      <button class="icon-btn" id="clearBtn" title="Clear chat">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
-      </button>
-      <button class="icon-btn" id="closeBtn" title="Close">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    <div class="topbar-right">
+      <span class="topbar-date" id="topbarDate"></span>
+      <button class="icon-btn" title="Refresh" onclick="loadAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
       </button>
     </div>
   </header>
 
-  <div class="chat-area" id="chatArea">
-    <div class="welcome" id="welcome">
-      <div class="welcome-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(108,138,255,0.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/>
-        </svg>
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <span class="nav-section-label">Menu</span>
+    <button class="nav-item active" data-view="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </button>
+    <button class="nav-item" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-item" data-view="activity">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Activity Feed
+      <span class="badge" id="nav-count">—</span>
+    </button>
+
+    <span class="nav-section-label">Tools</span>
+    <button class="nav-item" onclick="openChat()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Ask Atlas AI
+    </button>
+
+    <div class="sidebar-footer">
+      <div class="version-tag">Atlas v1.0 · Local</div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HOME VIEW -->
+    <div class="home-view active" id="view-home">
+      <div class="home-bg-orbs">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
       </div>
-      <h3>What did you do today?</h3>
-      <p>Ask me anything about your PC activity, browsing sessions, or daily patterns.</p>
-      <div class="chip-grid">
-        <button class="chip" data-q="What was I doing today?">📅 What was I doing today?</button>
-        <button class="chip" data-q="What websites did I visit yesterday?">🌐 Yesterday's websites</button>
-        <button class="chip" data-q="Summarize my day">📝 Summarize my day</button>
-        <button class="chip" data-q="What was I coding recently?">💻 Recent coding sessions</button>
+      <div class="home-content">
+        <div class="home-badge"><span class="dot"></span> Atlas · Active</div>
+        <h1 class="home-title">Atlas</h1>
+        <p class="home-sub">Your AI memory layer. Ask anything about your PC activity, browsing history, and daily patterns — all answered from local data.</p>
+
+        <div class="home-stats">
+          <div class="home-stat">
+            <div class="home-stat-val" id="h-logs">—</div>
+            <div class="home-stat-label">Logs Captured</div>
+          </div>
+          <div class="home-stat">
+            <div class="home-stat-val" id="h-apps">—</div>
+            <div class="home-stat-label">Apps Tracked</div>
+          </div>
+          <div class="home-stat">
+            <div class="home-stat-val" id="h-days">—</div>
+            <div class="home-stat-label">Days of Memory</div>
+          </div>
+        </div>
+
+        <div class="home-actions">
+          <button class="btn-primary" onclick="switchView('dashboard')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Open Dashboard
+          </button>
+          <button class="btn-ghost" onclick="openChat()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Ask Atlas
+          </button>
+        </div>
+      </div>
+      <div class="home-scroll-hint" onclick="switchView('dashboard')">
+        <span>Dashboard</span>
+        <span class="scroll-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
     </div>
-    <div class="msgs" id="msgs"></div>
-  </div>
 
-  <form class="composer" id="form">
-    <textarea
-      id="input"
-      placeholder="Ask Atlas anything…"
-      rows="1"
-      aria-label="Ask Atlas"
-    ></textarea>
-    <button class="send-btn" id="sendBtn" type="submit" aria-label="Send">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-      </svg>
-    </button>
+    <!-- DASHBOARD VIEW -->
+    <div class="view" id="view-dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Your activity at a glance</div>
+        </div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <div class="stat-card-top">
+            <div class="stat-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <span class="stat-label">Total Logs</span>
+          </div>
+          <div class="stat-val" id="s-logs">—</div>
+          <div class="stat-delta">All time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-top">
+            <div class="stat-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <span class="stat-label">Apps Tracked</span>
+          </div>
+          <div class="stat-val" id="s-apps">—</div>
+          <div class="stat-delta">Unique processes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-top">
+            <div class="stat-icon amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <span class="stat-label">Days of Memory</span>
+          </div>
+          <div class="stat-val" id="s-days">—</div>
+          <div class="stat-delta">Since first log</div>
+        </div>
+
+        <div class="chart-card">
+          <div><div class="card-title">Activity This Week</div><div class="card-sub">Logs per day</div></div>
+          <div class="bar-chart" id="barChart"><div class="empty-state" style="width:100%">Loading…</div></div>
+        </div>
+        <div class="app-card">
+          <div class="card-title">Top Apps</div>
+          <div id="appBreakdown"><div class="skeleton" style="height:14px;margin-bottom:10px"></div><div class="skeleton" style="height:14px;margin-bottom:10px;width:75%"></div><div class="skeleton" style="height:14px;width:55%"></div></div>
+        </div>
+
+        <div class="timeline-card">
+          <div class="card-title">Recent Timeline</div>
+          <div class="timeline-scroll" id="timelineList"><div class="empty-state">Loading…</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY VIEW -->
+    <div class="view" id="view-activity">
+      <div class="page-header">
+        <div><div class="page-title">Activity Feed</div><div class="page-sub">All captured events</div></div>
+      </div>
+      <div class="activity-layout">
+        <div class="activity-feed">
+          <div class="feed-header">
+            <span class="feed-title">All Logs</span>
+            <span class="feed-count" id="feedCount">—</span>
+            <div class="feed-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input type="text" id="feedSearch" placeholder="Search logs…">
+            </div>
+          </div>
+          <div class="feed-list" id="feedList"><div class="empty-state" style="padding:40px">Loading…</div></div>
+        </div>
+        <div class="activity-aside">
+          <div class="aside-card"><div class="aside-title">App Usage</div><div id="usageList"><div class="skeleton" style="height:12px;margin-bottom:10px"></div><div class="skeleton" style="height:12px;width:75%;margin-bottom:10px"></div><div class="skeleton" style="height:12px;width:55%"></div></div></div>
+          <div class="aside-card"><div class="aside-title">Sources</div><div id="sourceBreakdown"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FLOATING CHAT -->
+<div class="chat-panel" id="chatPanel">
+  <div class="chat-header">
+    <div class="chat-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="rgba(91,127,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><circle cx="9" cy="13" r="1" fill="rgba(91,127,255,0.9)" stroke="none"/><circle cx="15" cy="13" r="1" fill="rgba(91,127,255,0.9)" stroke="none"/></svg>
+    </div>
+    <div>
+      <div class="chat-hname">Atlas AI</div>
+      <div class="chat-hstatus"><span class="dot"></span> Ready</div>
+    </div>
+    <div class="chat-hactions">
+      <button class="icon-btn" id="clearChat" title="Clear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      <button class="icon-btn" id="closeChat" title="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="welcome-inner" id="welcomeInner">
+      <div class="welcome-orb"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(91,127,255,0.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2v-4M9 21H5a2 2 0 0 1-2-2v-4m0 0h18"/></svg></div>
+      <h4>Ask Atlas</h4>
+      <p>Ask anything about your PC activity, browsing, or daily patterns.</p>
+      <div class="chip-grid">
+        <button class="chip" data-q="What was I doing today?">📅 Today's activity</button>
+        <button class="chip" data-q="What websites did I visit yesterday?">🌐 Yesterday's sites</button>
+        <button class="chip" data-q="Summarize my day">📝 Summarize my day</button>
+        <button class="chip" data-q="What was I coding recently?">💻 Coding sessions</button>
+      </div>
+    </div>
+    <div class="msgs-list" id="msgsList"></div>
+  </div>
+  <form class="chat-composer" id="chatForm">
+    <textarea id="chatInput" placeholder="Ask Atlas anything… (Ctrl+Space)" rows="1"></textarea>
+    <button class="send-btn" id="sendBtn" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
   </form>
 </div>
 
-<!-- Launcher -->
-<button class="launcher" id="launcher" aria-label="Open Atlas">
-  <span class="launcher-icon">
-    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(180,200,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/>
-      <circle cx="9" cy="13" r="1" fill="rgba(180,200,255,0.9)" stroke="none"/>
-      <circle cx="15" cy="13" r="1" fill="rgba(180,200,255,0.9)" stroke="none"/>
-    </svg>
-  </span>
-  <span class="launcher-close" aria-hidden="true">✕</span>
+<button class="launcher" id="launcher" title="Ask Atlas (Ctrl+Space)">
+  <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="rgba(180,200,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/><circle cx="9" cy="13" r="1" fill="rgba(180,200,255,0.9)" stroke="none"/><circle cx="15" cy="13" r="1" fill="rgba(180,200,255,0.9)" stroke="none"/></svg>
+  <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="rgba(180,200,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
 </button>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="atlas.js"></script>
 <script>
-const panel = document.getElementById('panel');
-const launcher = document.getElementById('launcher');
-const closeBtn = document.getElementById('closeBtn');
-const clearBtn = document.getElementById('clearBtn');
-const form = document.getElementById('form');
-const input = document.getElementById('input');
-const sendBtn = document.getElementById('sendBtn');
-const chatArea = document.getElementById('chatArea');
-const msgs = document.getElementById('msgs');
-const welcome = document.getElementById('welcome');
-let busy = false;
+// ── DATE ──
+const dateEl = document.getElementById('topbarDate');
+function updateDate(){ dateEl.textContent = new Date().toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); }
+updateDate(); setInterval(updateDate, 30000);
 
-function open() {
-  panel.classList.add('open');
-  launcher.classList.add('open');
-  setTimeout(() => input.focus(), 200);
+// ── VIEW SWITCHING ──
+const ALL_VIEWS = ['home','dashboard','activity'];
+function switchView(name) {
+  ALL_VIEWS.forEach(v => {
+    const el = document.getElementById('view-'+v);
+    if (!el) return;
+    el.classList.remove('active');
+  });
+  const target = document.getElementById('view-'+name);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('.nav-item[data-view]').forEach(n => {
+    n.classList.toggle('active', n.dataset.view === name);
+  });
+
+  if (name === 'activity') renderFeed(allLogs);
 }
 
-function close() {
-  panel.classList.remove('open');
-  launcher.classList.remove('open');
-}
-
-launcher.addEventListener('click', () => panel.classList.contains('open') ? close() : open());
-closeBtn.addEventListener('click', close);
-
-clearBtn.addEventListener('click', () => {
-  msgs.innerHTML = '';
-  welcome.classList.remove('gone');
+document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+  item.addEventListener('click', () => switchView(item.dataset.view));
 });
 
-input.addEventListener('input', () => {
-  input.style.height = 'auto';
-  input.style.height = Math.min(input.scrollHeight, 120) + 'px';
-});
-
-input.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    submit(input.value);
-  }
-});
-
-form.addEventListener('submit', e => {
-  e.preventDefault();
-  submit(input.value);
-});
-
-document.querySelectorAll('.chip').forEach(c => {
-  c.addEventListener('click', () => submit(c.dataset.q));
-});
-
-function scrollBottom() {
-  chatArea.scrollTop = chatArea.scrollHeight;
+// ── DATA ──
+let allLogs = [];
+const APP_COLORS = ['#5b7fff','#2dd4a0','#f5a623','#9b7fff','#ff5f7e','#38bdf8','#fb923c'];
+const SOURCE_COLORS = { window_logger:'#5b7fff', browser_extension:'#2dd4a0', ocr:'#f5a623' };
+const APP_ICONS = { chrome:'🌐', code:'💻', vlc:'🎬', notepad:'📝', explorer:'📁', msedge:'🌐', firefox:'🦊', spotify:'🎵', discord:'💬' };
+function appIcon(name) {
+  const l = (name||'').toLowerCase();
+  for (const [k,v] of Object.entries(APP_ICONS)) { if (l.includes(k)) return v; }
+  return '⚙️';
 }
 
-function addMsg(role, text, extra) {
-  welcome.classList.add('gone');
-  const el = document.createElement('div');
-  el.className = ['msg', role, extra].filter(Boolean).join(' ');
-  if (role === 'ai' && typeof marked !== 'undefined') {
-    el.innerHTML = marked.parse(text);
-} else {
-    el.textContent = text;
-}
-  msgs.appendChild(el);
-  scrollBottom();
-  return el;
-}
+async function loadAll() { await Promise.all([loadStats(), loadTimeline()]); }
 
-function addTyping() {
-  welcome.classList.add('gone');
-  const el = document.createElement('div');
-  el.className = 'typing-indicator';
-  el.innerHTML = '<span></span><span></span><span></span>';
-  msgs.appendChild(el);
-  scrollBottom();
-  return el;
-}
-
-async function typeText(el, text) {
-
-  const clean = text || 'No response returned.';
-
-  if (typeof marked !== 'undefined') {
-      el.innerHTML = marked.parse(clean);
-  } else {
-      el.textContent = clean;
-  }
-
-  scrollBottom();
-}
-
-async function submit(question) {
-  const q = (question || '').trim();
-  if (!q || busy) return;
-  open();
-  addMsg('user', q);
-  input.value = '';
-  input.style.height = 'auto';
-  busy = true;
-  sendBtn.disabled = true;
-  const typing = addTyping();
-  try {
-    const res = await fetch('http://127.0.0.1:5000/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: q })
-    });
-    const data = await res.json();
-    typing.remove();
-    if (!res.ok || data.status !== 'success') throw new Error(data.message || 'Atlas could not answer that.');
-    const aiMsg = addMsg('ai', '');
-    await typeText(aiMsg, data.answer);
-  } catch (err) {
-    typing.remove();
-    addMsg('ai', 'Error: ' + err.message, 'err');
-  } finally {
-    busy = false;
-    sendBtn.disabled = false;
-    input.focus();
-  }
-}
-
-/* Fetch stats from backend */
 async function loadStats() {
   try {
-    const res = await fetch('http://127.0.0.1:5000/stats');
-    if (!res.ok) return;
-    const d = await res.json();
-    if (d.total_logs) document.getElementById('stat-logs').textContent = d.total_logs.toLocaleString();
-    if (d.unique_apps) document.getElementById('stat-apps').textContent = d.unique_apps;
-    if (d.days_tracked) document.getElementById('stat-days').textContent = d.days_tracked;
-  } catch {}
+    const r = await fetch('http://127.0.0.1:5000/stats');
+    const d = await r.json();
+    const logs = d.logs ?? d.total_logs ?? '—';
+    const apps = d.apps ?? d.unique_apps ?? '—';
+    const days = d.days ?? d.days_tracked ?? '—';
+    // Update both home and dashboard stat elements
+    ['s-logs','h-logs'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=logs; });
+    ['s-apps','h-apps'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=apps; });
+    ['s-days','h-days'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=days; });
+    const nc = document.getElementById('nav-count'); if(nc) nc.textContent=logs;
+    const fc = document.getElementById('feedCount'); if(fc) fc.textContent=logs+' entries';
+  } catch(e) {
+    ['s-logs','h-logs','s-apps','h-apps','s-days','h-days'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent='N/A'; });
+  }
 }
 
-loadStats();
+async function loadTimeline() {
+  try {
+    const r = await fetch('http://127.0.0.1:5000/recent?limit=100');
+    const d = await r.json();
+    allLogs = d.activities || d.logs || d || [];
+  } catch(e) {
+    allLogs = generateMockData();
+  }
+  renderTimeline(allLogs);
+  renderBarChart(allLogs);
+  renderAppBreakdown(allLogs);
+}
+
+function generateMockData() {
+  const items = [
+    {app:'Code.exe',title:'smart_memory_agent.py — PersonalOS AI',source:'window_logger'},
+    {app:'chrome.exe',title:'LeetCode — Array Problems',source:'browser_extension',url:'https://leetcode.com'},
+    {app:'chrome.exe',title:'YouTube — CS50 Lecture 3',source:'browser_extension',url:'https://youtube.com'},
+    {app:'Code.exe',title:'atlas.html — frontend',source:'window_logger'},
+    {app:'chrome.exe',title:'GitHub — PersonalOS AI',source:'browser_extension',url:'https://github.com'},
+    {app:'Discord.exe',title:'General — CS Community',source:'window_logger'},
+    {app:'chrome.exe',title:'Stack Overflow — Python asyncio',source:'browser_extension',url:'https://stackoverflow.com'},
+    {app:'Spotify.exe',title:'Lofi Hip Hop Radio',source:'window_logger'},
+    {app:'chrome.exe',title:'Google — Python SQLite tutorial',source:'browser_extension',url:'https://google.com'},
+    {app:'Code.exe',title:'db.py — database module',source:'window_logger'},
+  ];
+  const now = Date.now();
+  return Array.from({length:50},(_,i)=>{
+    const a = items[i%items.length];
+    return [i+1, new Date(now-i*7*60000).toISOString(), a.app, a.title, null, 'productivity', a.source, a.url||null];
+  });
+}
+
+function renderTimeline(logs) {
+  const el = document.getElementById('timelineList');
+  if (!logs.length) { el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>No logs yet</div>'; return; }
+  el.innerHTML = logs.slice(0,30).map((row,i) => {
+    const ts = row[1] ? new Date(row[1]).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : '—';
+    const src = row[6]||'window_logger';
+    const chip = src.includes('browser')?'browser':src.includes('ocr')?'ocr':'window';
+    return `<div class="tl-item">
+      <span class="tl-time">${ts}</span>
+      <span class="tl-dot" style="background:${APP_COLORS[i%APP_COLORS.length]}"></span>
+      <div class="tl-content"><div class="tl-app">${row[2]||'—'}</div><div class="tl-title">${row[3]||''}</div></div>
+      <span class="tl-source-chip ${chip}">${chip}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderBarChart(logs) {
+  const el = document.getElementById('barChart');
+  const DAY = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const days = {};
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days[d.toDateString()]={label:DAY[d.getDay()],count:0};}
+  logs.forEach(row=>{ if(!row[1])return; const k=new Date(row[1]).toDateString(); if(days[k])days[k].count++; });
+  const vals = Object.values(days);
+  const max = Math.max(...vals.map(v=>v.count),1);
+  el.innerHTML = vals.map(v=>{
+    const h = Math.max(4,Math.round((v.count/max)*72));
+    return `<div class="bar-col"><div class="bar" style="height:${h}px" title="${v.count} logs"></div><span class="bar-lbl">${v.label}</span></div>`;
+  }).join('');
+}
+
+function renderAppBreakdown(logs) {
+  const counts={};
+  logs.forEach(row=>{ const a=row[2]||'Unknown'; counts[a]=(counts[a]||0)+1; });
+  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const total=logs.length||1;
+
+  const el = document.getElementById('appBreakdown');
+  if(!sorted.length){el.innerHTML='<div style="color:var(--muted);font-size:12px">No data</div>';return;}
+  el.innerHTML=sorted.map(([app,count],i)=>{
+    const pct=Math.round((count/total)*100), color=APP_COLORS[i%APP_COLORS.length];
+    return `<div class="app-row"><span class="app-dot" style="background:${color}"></span><span class="app-name">${app}</span><span class="app-pct">${pct}%</span></div>
+    <div class="app-bar-track"><div class="app-bar-fill" style="width:${pct}%;background:${color}"></div></div>`;
+  }).join('');
+
+  const usageEl=document.getElementById('usageList');
+  if(usageEl) usageEl.innerHTML=sorted.map(([app,count],i)=>{
+    const pct=Math.round((count/total)*100),color=APP_COLORS[i%APP_COLORS.length];
+    return `<div class="app-usage-row">
+      <div class="usage-icon" style="background:${color}22;color:${color}">${appIcon(app)}</div>
+      <div class="usage-info"><div class="usage-name">${app}</div>
+      <div class="usage-bar-wrap"><div class="usage-track"><div class="usage-fill" style="width:${pct}%;background:${color}"></div></div><span class="usage-pct">${pct}%</span></div></div>
+    </div>`;
+  }).join('');
+
+  const srcEl=document.getElementById('sourceBreakdown');
+  if(srcEl){
+    const srcs={};
+    logs.forEach(row=>{const s=row[6]||'unknown';srcs[s]=(srcs[s]||0)+1;});
+    srcEl.innerHTML=Object.entries(srcs).map(([src,cnt])=>{
+      const pct=Math.round((cnt/total)*100),color=SOURCE_COLORS[src]||'#6b7299';
+      return `<div class="app-usage-row">
+        <div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0"></div>
+        <div class="usage-info"><div class="usage-name">${src.replace('_',' ')}</div>
+        <div class="usage-bar-wrap"><div class="usage-track"><div class="usage-fill" style="width:${pct}%;background:${color}"></div></div><span class="usage-pct">${pct}%</span></div></div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function renderFeed(logs) {
+  const q=(document.getElementById('feedSearch')?.value||'').toLowerCase();
+  const filtered=q?logs.filter(r=>(r[2]||'').toLowerCase().includes(q)||(r[3]||'').toLowerCase().includes(q)||(r[7]||'').toLowerCase().includes(q)):logs;
+  const el=document.getElementById('feedList');
+  if(!filtered.length){el.innerHTML='<div class="empty-state" style="padding:40px">No results</div>';return;}
+  el.innerHTML=filtered.slice(0,100).map((row,i)=>{
+    const ts=row[1]?new Date(row[1]).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
+    const src=row[6]||'window_logger';
+    const chip=src.includes('browser')?'browser':src.includes('ocr')?'ocr':'window';
+    const color=APP_COLORS[i%APP_COLORS.length];
+    return `<div class="feed-item">
+      <div class="feed-item-icon" style="background:${color}22;color:${color}">${appIcon(row[2])}</div>
+      <div class="feed-item-body">
+        <div class="feed-item-app">${row[2]||'—'}</div>
+        <div class="feed-item-title">${row[3]||''}</div>
+        ${row[7]?`<div class="feed-item-url">${row[7]}</div>`:''}
+        <div class="feed-item-meta"><span class="feed-item-time">${ts}</span><span class="tl-source-chip ${chip}" style="font-size:9px;padding:1px 6px">${chip}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('feedSearch')?.addEventListener('input',()=>renderFeed(allLogs));
+
+// ── CHAT ──
+const chatPanel=document.getElementById('chatPanel');
+const launcher=document.getElementById('launcher');
+const chatInput=document.getElementById('chatInput');
+const sendBtn=document.getElementById('sendBtn');
+const msgsList=document.getElementById('msgsList');
+const welcomeInner=document.getElementById('welcomeInner');
+let busy=false;
+
+function openChat(){chatPanel.classList.add('open');launcher.classList.add('open');setTimeout(()=>chatInput.focus(),200);}
+function closeChat(){chatPanel.classList.remove('open');launcher.classList.remove('open');}
+function toggleChat(){chatPanel.classList.contains('open')?closeChat():openChat();}
+
+launcher.addEventListener('click',toggleChat);
+document.getElementById('closeChat').addEventListener('click',closeChat);
+document.getElementById('clearChat').addEventListener('click',()=>{msgsList.innerHTML='';welcomeInner.classList.remove('gone');});
+
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.code==='Space'){e.preventDefault();toggleChat();}
+});
+
+chatInput.addEventListener('input',()=>{chatInput.style.height='auto';chatInput.style.height=Math.min(chatInput.scrollHeight,110)+'px';});
+chatInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();doSubmit(chatInput.value);}});
+document.getElementById('chatForm').addEventListener('submit',e=>{e.preventDefault();doSubmit(chatInput.value);});
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>doSubmit(c.dataset.q)));
+
+function addMsg(role,text,extra){
+  welcomeInner.classList.add('gone');
+  const el=document.createElement('div');
+  el.className=['msg',role,extra].filter(Boolean).join(' ');
+  if(role==='ai'&&typeof marked!=='undefined') el.innerHTML=marked.parse(text||'');
+  else el.textContent=text;
+  msgsList.appendChild(el);
+  document.getElementById('chatMessages').scrollTop=99999;
+  return el;
+}
+function addTyping(){
+  welcomeInner.classList.add('gone');
+  const el=document.createElement('div');
+  el.className='typing-ind';
+  el.innerHTML='<span></span><span></span><span></span>';
+  msgsList.appendChild(el);
+  document.getElementById('chatMessages').scrollTop=99999;
+  return el;
+}
+
+async function doSubmit(question){
+  const q=(question||'').trim();
+  if(!q||busy)return;
+  openChat();
+  addMsg('user',q);
+  chatInput.value='';chatInput.style.height='auto';
+  busy=true;sendBtn.disabled=true;
+  const typing=addTyping();
+  try{
+    const res=await fetch('http://127.0.0.1:5000/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});
+    const data=await res.json();
+    typing.remove();
+    if(!res.ok||data.status!=='success')throw new Error(data.message||'Atlas could not answer that.');
+    const aiEl=addMsg('ai','');
+    const clean=data.answer||'No response.';
+    if(typeof marked!=='undefined')aiEl.innerHTML=marked.parse(clean);
+    else aiEl.textContent=clean;
+    document.getElementById('chatMessages').scrollTop=99999;
+  }catch(err){
+    typing.remove();
+    addMsg('ai','Error: '+err.message,'err');
+  }finally{
+    busy=false;sendBtn.disabled=false;chatInput.focus();
+  }
+}
+
+loadAll();
 </script>
 </body>
 </html>

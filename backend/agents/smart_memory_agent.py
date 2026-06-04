@@ -17,10 +17,9 @@ from backend.retrieval.query_intent import (
     is_time_specific
 )
 
-from backend.retrieval.time_retriever import (
+from backend.retrieval.memory_retriever import (
     retrieve_by_time
 )
-
 
 def ask_memory(question):
 
