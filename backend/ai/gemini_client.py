@@ -48,4 +48,4 @@ def ask_gemini(prompt):
             e
         )
 
-        return None
+        return f"GEMINI ERROR: {str(e)}"

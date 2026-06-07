@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atlas</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='url(%23g)'/><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%235b7fff'/><stop offset='1' stop-color='%239b7fff'/></linearGradient></defs><circle cx='16' cy='16' r='10' stroke='white' stroke-width='1.5' fill='none'/><ellipse cx='16' cy='16' rx='5' ry='10' stroke='white' stroke-width='1.5' fill='none'/><line x1='6' y1='16' x2='26' y2='16' stroke='white' stroke-width='1.5'/><circle cx='16' cy='6' r='1.5' fill='white'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
@@ -44,7 +45,7 @@ body{background:radial-gradient(ellipse 80% 60% at -10% -10%,rgba(91,127,255,0.0
 /* ── TOPBAR ── */
 .topbar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:0 24px;border-bottom:1px solid var(--border);background:rgba(6,7,16,0.85);backdrop-filter:blur(24px);z-index:10;}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
-.logo-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;box-shadow:0 0 16px rgba(91,127,255,0.4);}
+.logo-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px rgba(91,127,255,0.4);overflow:hidden;}
 .logo-name{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text);}
 .topbar-divider{width:1px;height:20px;background:var(--border2);margin:0 4px;}
 .status-pill{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--green-dim);border:1px solid rgba(45,212,160,0.2);border-radius:99px;font-size:11px;color:var(--green);font-weight:500;}
@@ -325,6 +326,30 @@ body{background:radial-gradient(ellipse 80% 60% at -10% -10%,rgba(91,127,255,0.0
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes scrollBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
 
+
+/* ── RANGE TABS ── */
+.range-tabs{display:flex;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;}
+.range-tab{padding:5px 14px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all 150ms;}
+.range-tab.active{background:var(--accent-dim);color:var(--text);border:1px solid rgba(91,127,255,0.25);}
+.range-tab:hover:not(.active){color:var(--soft);}
+
+/* ── DURATION ROWS (digital wellbeing style) ── */
+.dur-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.dur-row:last-child{margin-bottom:0;}
+.dur-icon{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.dur-info{flex:1;min-width:0;}
+.dur-name{font-size:13px;color:var(--soft);font-weight:500;margin-bottom:4px;}
+.dur-bar-wrap{display:flex;align-items:center;gap:8px;}
+.dur-track{flex:1;height:6px;background:var(--surface3);border-radius:99px;overflow:hidden;}
+.dur-fill{height:100%;border-radius:99px;transition:width 600ms cubic-bezier(0.16,1,0.3,1);}
+.dur-time{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;min-width:48px;text-align:right;}
+
+/* ── SCREEN TIME CARD ── */
+.screen-time-card .stat-val{font-size:32px;}
+
+/* ── PAGE HEADER RIGHT ── */
+.page-header-right{margin-left:auto;}
+
 @media(max-width:900px){
   .shell{grid-template-columns:1fr;}
   .sidebar{display:none;}
@@ -341,7 +366,18 @@ body{background:radial-gradient(ellipse 80% 60% at -10% -10%,rgba(91,127,255,0.0
   <!-- TOPBAR -->
   <header class="topbar">
     <div class="logo" onclick="switchView('home')">
-      <div class="logo-mark">A</div>
+      <div class="logo-mark">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Globe with meridians - represents "memory of everything" -->
+          <circle cx="10" cy="10" r="8" stroke="white" stroke-width="1.2" stroke-opacity="0.9"/>
+          <ellipse cx="10" cy="10" rx="4" ry="8" stroke="white" stroke-width="1.2" stroke-opacity="0.7"/>
+          <line x1="2" y1="10" x2="18" y2="10" stroke="white" stroke-width="1.2" stroke-opacity="0.7"/>
+          <line x1="3.5" y1="5.5" x2="16.5" y2="5.5" stroke="white" stroke-width="1" stroke-opacity="0.5"/>
+          <line x1="3.5" y1="14.5" x2="16.5" y2="14.5" stroke="white" stroke-width="1" stroke-opacity="0.5"/>
+          <!-- Small dot at top like a north star -->
+          <circle cx="10" cy="2" r="1.2" fill="white"/>
+        </svg>
+      </div>
       <span class="logo-name">Atlas</span>
     </div>
     <div class="topbar-divider"></div>
@@ -437,54 +473,75 @@ body{background:radial-gradient(ellipse 80% 60% at -10% -10%,rgba(91,127,255,0.0
       <div class="page-header">
         <div>
           <div class="page-title">Dashboard</div>
-          <div class="page-sub">Your activity at a glance</div>
+          <div class="page-sub" id="dash-period-label">Today's activity</div>
+        </div>
+        <div class="page-header-right">
+          <div class="range-tabs">
+            <button class="range-tab active" data-range="today" onclick="switchRange('today',this)">Today</button>
+            <button class="range-tab" data-range="yesterday" onclick="switchRange('yesterday',this)">Yesterday</button>
+            <button class="range-tab" data-range="week" onclick="switchRange('week',this)">7 Days</button>
+          </div>
         </div>
       </div>
+
       <div class="dashboard-grid">
-        <div class="stat-card">
+
+        <!-- Screen time hero -->
+        <div class="stat-card screen-time-card">
           <div class="stat-card-top">
             <div class="stat-icon blue">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </div>
-            <span class="stat-label">Total Logs</span>
+            <span class="stat-label">Screen Time</span>
           </div>
-          <div class="stat-val" id="s-logs">—</div>
-          <div class="stat-delta">All time</div>
+          <div class="stat-val" id="s-screentime">—</div>
+          <div class="stat-delta" id="s-screentime-sub">Total today</div>
         </div>
+
         <div class="stat-card">
           <div class="stat-card-top">
             <div class="stat-icon green">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
-            <span class="stat-label">Apps Tracked</span>
+            <span class="stat-label">Apps Used</span>
           </div>
-          <div class="stat-val" id="s-apps">—</div>
-          <div class="stat-delta">Unique processes</div>
+          <div class="stat-val" id="s-apps-today">—</div>
+          <div class="stat-delta">Unique apps</div>
         </div>
+
         <div class="stat-card">
           <div class="stat-card-top">
             <div class="stat-icon amber">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
-            <span class="stat-label">Days of Memory</span>
+            <span class="stat-label">Sites Visited</span>
           </div>
-          <div class="stat-val" id="s-days">—</div>
-          <div class="stat-delta">Since first log</div>
+          <div class="stat-val" id="s-sites-today">—</div>
+          <div class="stat-delta">Unique websites</div>
         </div>
 
+        <!-- App usage with durations (digital wellbeing style) -->
         <div class="chart-card">
-          <div><div class="card-title">Activity This Week</div><div class="card-sub">Logs per day</div></div>
-          <div class="bar-chart" id="barChart"><div class="empty-state" style="width:100%">Loading…</div></div>
-        </div>
-        <div class="app-card">
-          <div class="card-title">Top Apps</div>
-          <div id="appBreakdown"><div class="skeleton" style="height:14px;margin-bottom:10px"></div><div class="skeleton" style="height:14px;margin-bottom:10px;width:75%"></div><div class="skeleton" style="height:14px;width:55%"></div></div>
+          <div>
+            <div class="card-title">App Screen Time</div>
+            <div class="card-sub">Time spent per app</div>
+          </div>
+          <div id="appDurationList"><div class="skeleton" style="height:14px;margin-bottom:12px"></div><div class="skeleton" style="height:14px;margin-bottom:12px;width:80%"></div><div class="skeleton" style="height:14px;width:60%"></div></div>
         </div>
 
-        <div class="timeline-card">
-          <div class="card-title">Recent Timeline</div>
-          <div class="timeline-scroll" id="timelineList"><div class="empty-state">Loading…</div></div>
+        <!-- Website usage with durations -->
+        <div class="app-card">
+          <div class="card-title">Website Time</div>
+          <div id="siteDurationList"><div class="skeleton" style="height:12px;margin-bottom:10px"></div><div class="skeleton" style="height:12px;margin-bottom:10px;width:75%"></div><div class="skeleton" style="height:12px;width:55%"></div></div>
         </div>
+
+        <!-- Hourly activity chart -->
+        <div class="timeline-card">
+          <div class="card-title">Hourly Activity</div>
+          <div class="card-sub" style="margin-bottom:10px">Screen time by hour</div>
+          <div class="bar-chart" id="hourlyChart"><div class="empty-state" style="width:100%">Loading…</div></div>
+        </div>
+
       </div>
     </div>
 
@@ -589,43 +646,209 @@ let allLogs = [];
 const APP_COLORS = ['#5b7fff','#2dd4a0','#f5a623','#9b7fff','#ff5f7e','#38bdf8','#fb923c'];
 const SOURCE_COLORS = { window_logger:'#5b7fff', browser_extension:'#2dd4a0', ocr:'#f5a623' };
 const APP_ICONS = { chrome:'🌐', code:'💻', vlc:'🎬', notepad:'📝', explorer:'📁', msedge:'🌐', firefox:'🦊', spotify:'🎵', discord:'💬' };
-function appIcon(name) {
-  const l = (name||'').toLowerCase();
-  for (const [k,v] of Object.entries(APP_ICONS)) { if (l.includes(k)) return v; }
+
+// Map app/site display names → their favicon domain
+const FAVICON_DOMAINS = {
+  'Chrome':'google.com','Edge':'microsoft.com','Firefox':'firefox.com',
+  'VS Code':'code.visualstudio.com','Spotify':'spotify.com',
+  'WhatsApp':'whatsapp.com','ChatGPT':'chatgpt.com','Discord':'discord.com',
+  'File Explorer':'microsoft.com','Notepad':'microsoft.com',
+  'Notepad++':'notepad-plus-plus.org','Microsoft Teams':'teams.microsoft.com',
+  'Slack':'slack.com','Zoom':'zoom.us','Obsidian':'obsidian.md',
+  'Notion':'notion.so','LinkedIn':'linkedin.com','VLC':'videolan.org',
+  'PowerShell':'microsoft.com','Terminal':'microsoft.com',
+  'Lock Screen':'microsoft.com','Snipping Tool':'microsoft.com',
+  'Paint':'microsoft.com','WinRAR':'win-rar.com','7-Zip':'7-zip.org',
+  'Task Manager':'microsoft.com','Calculator':'microsoft.com',
+  // Websites
+  'YouTube':'youtube.com','GitHub':'github.com','LeetCode':'leetcode.com',
+  'Codeforces':'codeforces.com','CodeChef':'codechef.com',
+  'Claude':'claude.ai','Google':'google.com','Stack Overflow':'stackoverflow.com',
+  'Twitter':'twitter.com','Twitter/X':'x.com','Reddit':'reddit.com',
+  'Google Docs':'docs.google.com','Google Drive':'drive.google.com',
+  'Gmail':'mail.google.com','Netflix':'netflix.com','Kaggle':'kaggle.com',
+  'GeeksForGeeks':'geeksforgeeks.org','HackerRank':'hackerrank.com',
+  'Medium':'medium.com','Dev.to':'dev.to','Wikipedia':'wikipedia.org',
+  'HackerEarth':'hackerearth.com','AtCoder':'atcoder.jp',
+  'Unstop':'unstop.com','Internshala':'internshala.com',
+  'Glassdoor':'glassdoor.com','Naukri':'naukri.com',
+  'Amazon':'amazon.com','Flipkart':'flipkart.com',
+  'OpenAI':'openai.com','Anthropic':'anthropic.com',
+};
+
+function faviconImg(name, size=16) {
+  const domain = FAVICON_DOMAINS[name];
+  if (!domain) return null;
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=${size*2}`;
+}
+
+function iconEl(name, size=16, colorHex='#5b7fff') {
+  const src = faviconImg(name, size);
+  if (src) {
+    return `<img src="${src}" width="${size}" height="${size}" style="border-radius:3px;object-fit:contain;" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><span style="display:none;width:${size}px;height:${size}px;align-items:center;justify-content:center;font-size:${size*0.75}px">⚙️</span>`;
+  }
+  return `<span style="font-size:${size*0.8}px">⚙️</span>`;
+}
+
+function faviconBg(name, sizePx=28) {
+  // Returns an <img> or fallback for use inside icon containers
+  const src = faviconImg(name, sizePx);
+  if (src) {
+    return `<img src="${src}" width="${sizePx}" height="${sizePx}" style="border-radius:4px;object-fit:contain" onerror="this.parentElement.innerHTML='⚙️'">`;
+  }
   return '⚙️';
 }
 
-async function loadAll() { await Promise.all([loadStats(), loadTimeline()]); }
+function siteIcon(name) { return faviconBg(name, 16); }
+
+function appIcon(name) {
+  const display = normalizeApp ? normalizeApp(name) : name;
+  return faviconBg(display, 16);
+}
+
+// ── Duration formatter ───────────────────────────────────────────────────────
+function fmtDuration(seconds) {
+  if (!seconds || seconds < 60) return seconds + 's';
+  const m = Math.floor(seconds / 60);
+  if (m < 60) return m + ' min';
+  const h = Math.floor(m / 60), mins = m % 60;
+  return mins === 0 ? h + ' hr' : h + ' hr ' + mins + ' min';
+}
+
+// ── Current range ─────────────────────────────────────────────────────────────
+let currentRange = 'today';
+
+function switchRange(range, btn) {
+  currentRange = range;
+  document.querySelectorAll('.range-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  loadDashboard();
+}
+
+async function loadAll() {
+  await Promise.all([loadStats(), loadDashboard(), loadTimeline()]);
+}
 
 async function loadStats() {
   try {
     const r = await fetch('http://127.0.0.1:5000/stats');
     const d = await r.json();
-    const logs = d.logs ?? d.total_logs ?? '—';
-    const apps = d.apps ?? d.unique_apps ?? '—';
-    const days = d.days ?? d.days_tracked ?? '—';
-    // Update both home and dashboard stat elements
-    ['s-logs','h-logs'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=logs; });
-    ['s-apps','h-apps'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=apps; });
-    ['s-days','h-days'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=days; });
+    const logs = d.logs ?? '—';
+    const apps = d.apps ?? '—';
+    const days = d.days ?? '—';
+    ['h-logs'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=logs; });
+    ['h-apps'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=apps; });
+    ['h-days'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent=days; });
     const nc = document.getElementById('nav-count'); if(nc) nc.textContent=logs;
     const fc = document.getElementById('feedCount'); if(fc) fc.textContent=logs+' entries';
+  } catch(e) {}
+}
+
+async function loadDashboard() {
+  try {
+    const r = await fetch('http://127.0.0.1:5000/dashboard_stats?range=' + currentRange);
+    const d = await r.json();
+    renderDashboard(d);
   } catch(e) {
-    ['s-logs','h-logs','s-apps','h-apps','s-days','h-days'].forEach(id => { const el=document.getElementById(id); if(el) el.textContent='N/A'; });
+    console.warn('Dashboard stats unavailable');
+    renderDashboard(null);
+  }
+}
+
+function renderDashboard(d) {
+  if (!d || d.status === 'error') {
+    ['appDurationList','siteDurationList','hourlyChart'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px 0">No data — start the Flask server</div>';
+    });
+    return;
+  }
+
+  // ── Header stats
+  const st = document.getElementById('s-screentime');
+  if (st) st.textContent = fmtDuration(d.total_seconds);
+  const stSub = document.getElementById('s-screentime-sub');
+  if (stSub) stSub.textContent = d.label || 'Total';
+  const label = document.getElementById('dash-period-label');
+  if (label) label.textContent = (d.label || 'Today') + "'s activity";
+
+  const appsEl = document.getElementById('s-apps-today');
+  if (appsEl) appsEl.textContent = d.apps ? d.apps.length : '—';
+  const sitesEl = document.getElementById('s-sites-today');
+  if (sitesEl) sitesEl.textContent = d.websites ? d.websites.filter(s=>s.name).length : '—';
+
+  // ── App duration list (digital wellbeing style)
+  const appEl = document.getElementById('appDurationList');
+  if (appEl && d.apps && d.apps.length) {
+    const maxSec = d.apps[0].seconds || 1;
+    appEl.innerHTML = d.apps.map((a, i) => {
+      const pct = Math.round((a.seconds / maxSec) * 100);
+      const color = APP_COLORS[i % APP_COLORS.length];
+      return `<div class="dur-row">
+        <div class="dur-icon" style="background:${color}22;">${faviconBg(a.name, 18)}</div>
+        <div class="dur-info">
+          <div class="dur-name">${a.name}</div>
+          <div class="dur-bar-wrap">
+            <div class="dur-track"><div class="dur-fill" style="width:${pct}%;background:${color}"></div></div>
+            <span class="dur-time">${fmtDuration(a.seconds)}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  } else if (appEl) {
+    appEl.innerHTML = '<div style="color:var(--muted);font-size:12px">No app data</div>';
+  }
+
+  // ── Website duration list
+  const siteEl = document.getElementById('siteDurationList');
+  if (siteEl && d.websites && d.websites.length) {
+    const maxSec = d.websites[0].seconds || 1;
+    siteEl.innerHTML = d.websites.map((s, i) => {
+      const pct = Math.round((s.seconds / maxSec) * 100);
+      const color = APP_COLORS[(i + 2) % APP_COLORS.length];
+      return `<div class="app-usage-row">
+        <div class="usage-icon" style="background:${color}22;display:flex;align-items:center;justify-content:center;">${faviconBg(s.name, 16)}</div>
+        <div class="usage-info">
+          <div class="usage-name">${s.name}</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-track"><div class="usage-fill" style="width:${pct}%;background:${color}"></div></div>
+            <span class="usage-pct">${fmtDuration(s.seconds)}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  } else if (siteEl) {
+    siteEl.innerHTML = '<div style="color:var(--muted);font-size:12px">No website data</div>';
+  }
+
+  // ── Hourly chart
+  const hourEl = document.getElementById('hourlyChart');
+  if (hourEl && d.hourly && d.hourly.length) {
+    const maxSec = Math.max(...d.hourly.map(h => h.seconds), 1);
+    // Only show hours 6am–midnight
+    const visible = d.hourly.filter(h => h.hour >= 6 && h.hour <= 23);
+    hourEl.innerHTML = visible.map(h => {
+      const ht = Math.max(4, Math.round((h.seconds / maxSec) * 72));
+      const label = h.hour === 12 ? '12pm' : h.hour > 12 ? (h.hour-12)+'pm' : h.hour+'am';
+      return `<div class="bar-col">
+        <div class="bar" style="height:${ht}px" title="${label}: ${fmtDuration(h.seconds)}"></div>
+        <span class="bar-lbl">${label}</span>
+      </div>`;
+    }).join('');
+  } else if (hourEl) {
+    hourEl.innerHTML = '<div class="empty-state" style="width:100%">No hourly data</div>';
   }
 }
 
 async function loadTimeline() {
   try {
-    const r = await fetch('http://127.0.0.1:5000/recent?limit=100');
+    const r = await fetch('http://127.0.0.1:5000/recent?limit=150');
     const d = await r.json();
     allLogs = d.activities || d.logs || d || [];
   } catch(e) {
     allLogs = generateMockData();
   }
   renderTimeline(allLogs);
-  renderBarChart(allLogs);
-  renderAppBreakdown(allLogs);
 }
 
 function generateMockData() {
@@ -650,93 +873,124 @@ function generateMockData() {
 
 function renderTimeline(logs) {
   const el = document.getElementById('timelineList');
+  if (!el) return;
   if (!logs.length) { el.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>No logs yet</div>'; return; }
   el.innerHTML = logs.slice(0,30).map((row,i) => {
-    const ts = row[1] ? new Date(row[1]).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : '—';
-    const src = row[6]||'window_logger';
-    const chip = src.includes('browser')?'browser':src.includes('ocr')?'ocr':'window';
+    const ts      = (getField(row,1,'timestamp')||'');
+    const appRaw  = getField(row,2,'app_raw') || row[2] || '';
+    const appDisp = getField(row,null,'app_display') || normalizeApp(appRaw);
+    const title   = getField(row,3,'window_title') || '';
+    const source  = getField(row,6,'source') || 'window_logger';
+    const chip    = source.includes('browser')?'browser':source.includes('ocr')?'ocr':'window';
+    const tsStr   = ts ? new Date(ts).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) : '—';
     return `<div class="tl-item">
-      <span class="tl-time">${ts}</span>
+      <span class="tl-time">${tsStr}</span>
       <span class="tl-dot" style="background:${APP_COLORS[i%APP_COLORS.length]}"></span>
-      <div class="tl-content"><div class="tl-app">${row[2]||'—'}</div><div class="tl-title">${row[3]||''}</div></div>
+      <div class="tl-content"><div class="tl-app">${appDisp}</div><div class="tl-title">${title}</div></div>
       <span class="tl-source-chip ${chip}">${chip}</span>
     </div>`;
   }).join('');
 }
 
-function renderBarChart(logs) {
-  const el = document.getElementById('barChart');
-  const DAY = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const days = {};
-  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days[d.toDateString()]={label:DAY[d.getDay()],count:0};}
-  logs.forEach(row=>{ if(!row[1])return; const k=new Date(row[1]).toDateString(); if(days[k])days[k].count++; });
-  const vals = Object.values(days);
-  const max = Math.max(...vals.map(v=>v.count),1);
-  el.innerHTML = vals.map(v=>{
-    const h = Math.max(4,Math.round((v.count/max)*72));
-    return `<div class="bar-col"><div class="bar" style="height:${h}px" title="${v.count} logs"></div><span class="bar-lbl">${v.label}</span></div>`;
-  }).join('');
-}
 
-function renderAppBreakdown(logs) {
-  const counts={};
-  logs.forEach(row=>{ const a=row[2]||'Unknown'; counts[a]=(counts[a]||0)+1; });
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const total=logs.length||1;
 
-  const el = document.getElementById('appBreakdown');
-  if(!sorted.length){el.innerHTML='<div style="color:var(--muted);font-size:12px">No data</div>';return;}
-  el.innerHTML=sorted.map(([app,count],i)=>{
-    const pct=Math.round((count/total)*100), color=APP_COLORS[i%APP_COLORS.length];
-    return `<div class="app-row"><span class="app-dot" style="background:${color}"></span><span class="app-name">${app}</span><span class="app-pct">${pct}%</span></div>
-    <div class="app-bar-track"><div class="app-bar-fill" style="width:${pct}%;background:${color}"></div></div>`;
-  }).join('');
-
-  const usageEl=document.getElementById('usageList');
-  if(usageEl) usageEl.innerHTML=sorted.map(([app,count],i)=>{
-    const pct=Math.round((count/total)*100),color=APP_COLORS[i%APP_COLORS.length];
-    return `<div class="app-usage-row">
-      <div class="usage-icon" style="background:${color}22;color:${color}">${appIcon(app)}</div>
-      <div class="usage-info"><div class="usage-name">${app}</div>
-      <div class="usage-bar-wrap"><div class="usage-track"><div class="usage-fill" style="width:${pct}%;background:${color}"></div></div><span class="usage-pct">${pct}%</span></div></div>
-    </div>`;
-  }).join('');
-
-  const srcEl=document.getElementById('sourceBreakdown');
-  if(srcEl){
-    const srcs={};
-    logs.forEach(row=>{const s=row[6]||'unknown';srcs[s]=(srcs[s]||0)+1;});
-    srcEl.innerHTML=Object.entries(srcs).map(([src,cnt])=>{
-      const pct=Math.round((cnt/total)*100),color=SOURCE_COLORS[src]||'#6b7299';
-      return `<div class="app-usage-row">
-        <div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0"></div>
-        <div class="usage-info"><div class="usage-name">${src.replace('_',' ')}</div>
-        <div class="usage-bar-wrap"><div class="usage-track"><div class="usage-fill" style="width:${pct}%;background:${color}"></div></div><span class="usage-pct">${pct}%</span></div></div>
-      </div>`;
-    }).join('');
-  }
+function getField(row, arrayIdx, objKey) {
+  // Supports both old array format and new object format from /recent
+  if (Array.isArray(row)) return row[arrayIdx];
+  return row[objKey];
 }
 
 function renderFeed(logs) {
-  const q=(document.getElementById('feedSearch')?.value||'').toLowerCase();
-  const filtered=q?logs.filter(r=>(r[2]||'').toLowerCase().includes(q)||(r[3]||'').toLowerCase().includes(q)||(r[7]||'').toLowerCase().includes(q)):logs;
-  const el=document.getElementById('feedList');
-  if(!filtered.length){el.innerHTML='<div class="empty-state" style="padding:40px">No results</div>';return;}
-  el.innerHTML=filtered.slice(0,100).map((row,i)=>{
-    const ts=row[1]?new Date(row[1]).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'—';
-    const src=row[6]||'window_logger';
-    const chip=src.includes('browser')?'browser':src.includes('ocr')?'ocr':'window';
-    const color=APP_COLORS[i%APP_COLORS.length];
+  const q = (document.getElementById('feedSearch')?.value || '').toLowerCase();
+
+  const filtered = q ? logs.filter(row => {
+    const app   = (getField(row,2,'app_display') || getField(row,2,'app_raw') || '').toLowerCase();
+    const title = (getField(row,3,'window_title') || '').toLowerCase();
+    const url   = (getField(row,7,'url') || '').toLowerCase();
+    return app.includes(q) || title.includes(q) || url.includes(q);
+  }) : logs;
+
+  const el = document.getElementById('feedList');
+  if (!filtered.length) { el.innerHTML='<div class="empty-state" style="padding:40px">No results</div>'; return; }
+
+  // Build sidebar aggregations
+  const appCounts = {}, srcCounts = {};
+
+  const html = filtered.slice(0, 150).map((row, i) => {
+    const ts        = (getField(row,1,'timestamp') || '');
+    const appRaw    = getField(row,2,'app_raw') || getField(row,2,'app_name') || row[2] || '';
+    const appDisplay= getField(row,null,'app_display') || normalizeApp(appRaw);
+    const title     = getField(row,3,'window_title') || '';
+    const source    = getField(row,6,'source') || 'window_logger';
+    const url       = getField(row,7,'url') || '';
+    const siteDisp  = getField(row,null,'site_display') || '';
+    const icon      = getField(row,null,'app_icon') || appIcon(appRaw);
+
+    // Tally for sidebar
+    appCounts[appDisplay] = (appCounts[appDisplay] || 0) + 1;
+    srcCounts[source]     = (srcCounts[source]     || 0) + 1;
+
+    const color = APP_COLORS[i % APP_COLORS.length];
+    const chip  = source.includes('browser') ? 'browser' : source.includes('ocr') ? 'ocr' : 'window';
+    const tsStr = ts ? new Date(ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+
     return `<div class="feed-item">
-      <div class="feed-item-icon" style="background:${color}22;color:${color}">${appIcon(row[2])}</div>
+      <div class="feed-item-icon" style="background:${color}22;">${faviconBg(appDisplay, 18)}</div>
       <div class="feed-item-body">
-        <div class="feed-item-app">${row[2]||'—'}</div>
-        <div class="feed-item-title">${row[3]||''}</div>
-        ${row[7]?`<div class="feed-item-url">${row[7]}</div>`:''}
-        <div class="feed-item-meta"><span class="feed-item-time">${ts}</span><span class="tl-source-chip ${chip}" style="font-size:9px;padding:1px 6px">${chip}</span></div>
+        <div class="feed-item-app">${appDisplay || '—'}</div>
+        <div class="feed-item-title">${title}</div>
+        ${url && !url.startsWith('file:') ? `<div class="feed-item-url">${siteDisp || url}</div>` : ''}
+        <div class="feed-item-meta">
+          <span class="feed-item-time">${tsStr}</span>
+          <span class="tl-source-chip ${chip}" style="font-size:9px;padding:1px 6px">${chip}</span>
+        </div>
       </div>
     </div>`;
   }).join('');
+
+  el.innerHTML = html;
+
+  // ── Populate App Usage sidebar ──────────────────────────────────────────
+  const usageEl = document.getElementById('usageList');
+  if (usageEl) {
+    const sorted = Object.entries(appCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const max = sorted[0]?.[1] || 1;
+    usageEl.innerHTML = sorted.map(([app,cnt],i) => {
+      const pct = Math.round((cnt/max)*100);
+      const color = APP_COLORS[i%APP_COLORS.length];
+      return `<div class="app-usage-row">
+        <div class="usage-icon" style="background:${color}22;display:flex;align-items:center;justify-content:center;">${faviconBg(app, 16)}</div>
+        <div class="usage-info">
+          <div class="usage-name">${app}</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-track"><div class="usage-fill" style="width:${pct}%;background:${color}"></div></div>
+            <span class="usage-pct">${cnt}</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Populate Sources sidebar ────────────────────────────────────────────
+  const srcEl = document.getElementById('sourceBreakdown');
+  if (srcEl) {
+    const total = Object.values(srcCounts).reduce((a,b)=>a+b,0) || 1;
+    srcEl.innerHTML = Object.entries(srcCounts).map(([src,cnt]) => {
+      const pct   = Math.round((cnt/total)*100);
+      const color = SOURCE_COLORS[src] || '#6b7299';
+      const label = src === 'browser_extension' ? 'Browser' : src === 'window_logger' ? 'Window' : src === 'ocr' ? 'OCR' : src;
+      return `<div class="app-usage-row">
+        <div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;margin-top:2px"></div>
+        <div class="usage-info">
+          <div class="usage-name">${label} — ${cnt} events</div>
+          <div class="usage-bar-wrap">
+            <div class="usage-track"><div class="usage-fill" style="width:${pct}%;background:${color}"></div></div>
+            <span class="usage-pct">${pct}%</span>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
 }
 
 document.getElementById('feedSearch')?.addEventListener('input',()=>renderFeed(allLogs));
