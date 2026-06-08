@@ -11,6 +11,181 @@ from backend.database.db import (
 app = Flask(__name__)
 CORS(app)
 
+# ── Shared lookup tables ──────────────────────────────────────────────────────
+
+SKIP_URLS_GLOBAL = (
+    "chrome://", "chrome-extension://",
+    "file:///", "edge://", "about:",
+    "127.0.0.1", "localhost",
+)
+
+APP_NAMES_GLOBAL = {
+    "chrome.exe": "Chrome",
+    "msedge.exe": "Edge",
+    "firefox.exe": "Firefox",
+    "code.exe": "VS Code",
+    "spotify.exe": "Spotify",
+    "whatsapp.root.exe": "WhatsApp",
+    "whatsapp.exe": "WhatsApp",
+    "chatgpt.exe": "ChatGPT",
+    "discord.exe": "Discord",
+    "explorer.exe": "File Explorer",
+    "notepad.exe": "Notepad",
+    "notepad++.exe": "Notepad++",
+    "teams.exe": "Microsoft Teams",
+    "slack.exe": "Slack",
+    "zoom.exe": "Zoom",
+    "obsidian.exe": "Obsidian",
+    "notion.exe": "Notion",
+    "linkedin.exe": "LinkedIn",
+    "vlc.exe": "VLC",
+    "powershell.exe": "PowerShell",
+    "cmd.exe": "Command Prompt",
+    "windowsterminal.exe": "Terminal",
+    "lockapp.exe": "Lock Screen",
+    "snippingtool.exe": "Snipping Tool",
+    "mspaint.exe": "Paint",
+    "winrar.exe": "WinRAR",
+    "7zfm.exe": "7-Zip",
+    "taskmgr.exe": "Task Manager",
+    "calculator.exe": "Calculator",
+}
+
+APP_ICONS_GLOBAL = {
+    "Chrome": "🌐", "Edge": "🌐", "Firefox": "🦊", "VS Code": "💻",
+    "Spotify": "🎵", "WhatsApp": "💬", "ChatGPT": "🤖", "Discord": "💬",
+    "File Explorer": "📁", "Notepad": "📝", "Notepad++": "📝",
+    "Microsoft Teams": "👥", "Slack": "💬", "Zoom": "📹",
+    "Obsidian": "🗒️", "Notion": "📋", "LinkedIn": "💼", "VLC": "🎬",
+    "PowerShell": "⬛", "Terminal": "⬛", "Command Prompt": "⬛",
+    "Lock Screen": "🔒", "Snipping Tool": "✂️", "Paint": "🎨",
+    "WinRAR": "📦", "7-Zip": "📦", "Task Manager": "📊", "Calculator": "🔢",
+}
+
+# Maps second-level domain names → display names
+# Covers both exact and subdomain matches
+SITE_NAMES_GLOBAL = {
+    "leetcode.com": "LeetCode",
+    "github.com": "GitHub",
+    "youtube.com": "YouTube",
+    "codeforces.com": "Codeforces",
+    "codechef.com": "CodeChef",
+    "claude.ai": "Claude",
+    "chatgpt.com": "ChatGPT",
+    "openai.com": "ChatGPT",
+    "google.com": "Google",
+    "google.co.in": "Google",
+    "withgoogle.com": "Google",      # rsvp.withgoogle.com, pair.withgoogle.com
+    "googleapis.com": "Google",
+    "stackoverflow.com": "Stack Overflow",
+    "linkedin.com": "LinkedIn",
+    "twitter.com": "Twitter",
+    "x.com": "Twitter/X",
+    "reddit.com": "Reddit",
+    "notion.so": "Notion",
+    "docs.google.com": "Google Docs",
+    "drive.google.com": "Google Drive",
+    "mail.google.com": "Gmail",
+    "calendar.google.com": "Google Calendar",
+    "sheets.google.com": "Google Sheets",
+    "netflix.com": "Netflix",
+    "spotify.com": "Spotify Web",
+    "kaggle.com": "Kaggle",
+    "geeksforgeeks.org": "GeeksForGeeks",
+    "hackerrank.com": "HackerRank",
+    "medium.com": "Medium",
+    "dev.to": "Dev.to",
+    "npmjs.com": "npm",
+    "pypi.org": "PyPI",
+    "wikipedia.org": "Wikipedia",
+    "glassdoor.com": "Glassdoor",
+    "naukri.com": "Naukri",
+    "internshala.com": "Internshala",
+    "unstop.com": "Unstop",
+    "hackerearth.com": "HackerEarth",
+    "atcoder.jp": "AtCoder",
+    "codingninjas.com": "Coding Ninjas",
+    "amazon.in": "Amazon",
+    "amazon.com": "Amazon",
+    "flipkart.com": "Flipkart",
+    "anthropic.com": "Anthropic",
+    "microsoft.com": "Microsoft",
+    "apple.com": "Apple",
+    "codolio.com": "Codolio",
+    "support.google.com": "Google Support",
+}
+
+# Window titles to skip — only true browser noise, not page names
+SKIP_TITLES = {
+    "new tab", "newtab", "",
+}
+
+
+def normalize_app(raw_name):
+    """Convert exe name to human display name."""
+    if not raw_name:
+        return "Unknown"
+    return APP_NAMES_GLOBAL.get(raw_name.lower(), raw_name)
+
+
+def normalize_site(url, window_title=""):
+    """
+    Convert a URL to a clean website display name.
+    Returns empty string for internal/system URLs that should be skipped.
+    """
+    from urllib.parse import urlparse
+
+    if not url:
+        return ""
+
+    # Skip system/internal URLs
+    if any(url.startswith(s) for s in SKIP_URLS_GLOBAL):
+        return ""
+
+    # Skip if window title is noise
+    if window_title and window_title.lower().strip() in SKIP_TITLES:
+        return ""
+
+    try:
+        parsed = urlparse(url)
+        full_domain = (parsed.netloc or "").lower()
+        if not full_domain:
+            return ""
+
+        # Strip port
+        full_domain = full_domain.split(":")[0]
+
+        # Strip www.
+        if full_domain.startswith("www."):
+            full_domain = full_domain[4:]
+
+        # Try exact match first
+        if full_domain in SITE_NAMES_GLOBAL:
+            return SITE_NAMES_GLOBAL[full_domain]
+
+        # Try suffix match (handles subdomains)
+        for known, name in SITE_NAMES_GLOBAL.items():
+            if full_domain.endswith("." + known) or full_domain == known:
+                return name
+
+        # Fallback: use the REGISTERED domain (second-to-last part before TLD)
+        # e.g. rsvp.withgoogle.com → withgoogle
+        #      chat.openai.com → openai
+        #      www.codeforces.com → codeforces
+        parts = full_domain.split(".")
+        if len(parts) >= 2:
+            # Use second-to-last part (registered domain name)
+            registered = parts[-2]
+            # Skip if too short or numeric (e.g. 127 from 127.0.0.1)
+            if len(registered) > 2 and not registered.isdigit():
+                return registered.replace("-", " ").title()
+
+        return ""
+
+    except Exception:
+        return ""
+
+
 
 # ── Browser collector ─────────────────────────────────────────────────────────
 @app.route("/browser_activity", methods=["POST"])
@@ -70,83 +245,17 @@ def recent():
     Schema: id(0),timestamp(1),app_name(2),window_title(3),
             ocr_text(4),category(5),source(6),url(7)
     """
-    from urllib.parse import urlparse
-
-    SKIP_URLS = ("chrome://", "file:///", "chrome-extension://",
-                 "127.0.0.1", "localhost", "edge://", "about:")
-
-    APP_NAMES_R = {
-        "chrome.exe":"Chrome","msedge.exe":"Edge","firefox.exe":"Firefox",
-        "code.exe":"VS Code","spotify.exe":"Spotify",
-        "whatsapp.root.exe":"WhatsApp","whatsapp.exe":"WhatsApp",
-        "chatgpt.exe":"ChatGPT","discord.exe":"Discord",
-        "explorer.exe":"File Explorer","notepad.exe":"Notepad",
-        "notepad++.exe":"Notepad++","teams.exe":"Microsoft Teams",
-        "slack.exe":"Slack","zoom.exe":"Zoom","obsidian.exe":"Obsidian",
-        "notion.exe":"Notion","linkedin.exe":"LinkedIn","vlc.exe":"VLC",
-        "powershell.exe":"PowerShell","cmd.exe":"Command Prompt",
-        "windowsterminal.exe":"Terminal","lockapp.exe":"Lock Screen",
-        "snippingtool.exe":"Snipping Tool","mspaint.exe":"Paint",
-        "winrar.exe":"WinRAR","7zfm.exe":"7-Zip",
-        "taskmgr.exe":"Task Manager","calculator.exe":"Calculator",
-    }
-    APP_ICONS_R = {
-        "Chrome":"🌐","Edge":"🌐","Firefox":"🦊","VS Code":"💻",
-        "Spotify":"🎵","WhatsApp":"💬","ChatGPT":"🤖","Discord":"💬",
-        "File Explorer":"📁","Notepad":"📝","Notepad++":"📝",
-        "Microsoft Teams":"👥","Slack":"💬","Zoom":"📹","Obsidian":"🗒️",
-        "Notion":"📋","LinkedIn":"💼","VLC":"🎬","PowerShell":"⬛",
-        "Terminal":"⬛","Command Prompt":"⬛","Lock Screen":"🔒",
-        "Snipping Tool":"✂️","Paint":"🎨","WinRAR":"📦","7-Zip":"📦",
-        "Task Manager":"📊","Calculator":"🔢",
-    }
-    SITE_NAMES_R = {
-        "leetcode.com":"LeetCode","github.com":"GitHub","youtube.com":"YouTube",
-        "codeforces.com":"Codeforces","codechef.com":"CodeChef",
-        "claude.ai":"Claude","chatgpt.com":"ChatGPT",
-        "chat.openai.com":"ChatGPT","google.com":"Google",
-        "google.co.in":"Google","stackoverflow.com":"Stack Overflow",
-        "linkedin.com":"LinkedIn","twitter.com":"Twitter","x.com":"Twitter/X",
-        "reddit.com":"Reddit","notion.so":"Notion","medium.com":"Medium",
-        "geeksforgeeks.org":"GeeksForGeeks","hackerrank.com":"HackerRank",
-        "kaggle.com":"Kaggle","wikipedia.org":"Wikipedia",
-        "hackerearth.com":"HackerEarth","atcoder.jp":"AtCoder",
-        "unstop.com":"Unstop","internshala.com":"Internshala",
-        "glassdoor.com":"Glassdoor","naukri.com":"Naukri",
-        "amazon.in":"Amazon","amazon.com":"Amazon","openai.com":"OpenAI",
-        "anthropic.com":"Anthropic","docs.google.com":"Google Docs",
-        "drive.google.com":"Google Drive","mail.google.com":"Gmail",
-    }
-
     try:
         limit = request.args.get("limit", 150, type=int)
         activities = get_recent_activities(limit)
         result = []
         for row in activities:
-            app_raw     = row[2] or ""
-            app_display = APP_NAMES_R.get(app_raw.lower(), app_raw)
-            app_icon_v  = APP_ICONS_R.get(app_display, "⚙️")
-            url         = row[7] or ""
-            url_is_real = url and not any(url.startswith(s) for s in SKIP_URLS)
-
-            site_display = ""
-            if url_is_real:
-                try:
-                    parsed = urlparse(url)
-                    domain = (parsed.netloc or "").lower()
-                    if domain.startswith("www."): domain = domain[4:]
-                    domain = domain.split(":")[0]
-                    for known, name in SITE_NAMES_R.items():
-                        if domain == known or domain.endswith("." + known):
-                            site_display = name
-                            break
-                    if not site_display:
-                        parts = domain.split(".")
-                        first = parts[0] if parts else ""
-                        if len(first) > 1 and not first.isdigit():
-                            site_display = first.replace("-", " ").title()
-                except Exception:
-                    pass
+            app_raw      = row[2] or ""
+            app_display  = normalize_app(app_raw)
+            app_icon_v   = APP_ICONS_GLOBAL.get(app_display, "⚙️")
+            url          = row[7] or ""
+            window_title = row[3] or ""
+            site_display = normalize_site(url, window_title)
 
             result.append({
                 "id":           row[0],
@@ -154,11 +263,11 @@ def recent():
                 "app_raw":      app_raw,
                 "app_display":  app_display,
                 "app_icon":     app_icon_v,
-                "window_title": row[3],
+                "window_title": window_title,
                 "ocr_text":     row[4],
                 "category":     row[5],
                 "source":       row[6],
-                "url":          url if url_is_real else "",
+                "url":          url if not any(url.startswith(s) for s in SKIP_URLS_GLOBAL) else "",
                 "site_display": site_display,
             })
         return jsonify({"activities": result})
@@ -234,128 +343,16 @@ def dashboard_stats():
             else:
                 duration = DEFAULT_SESSION
 
-            from urllib.parse import urlparse
-
-            # CORRECT column: url is row[7], NOT row[4]
-            url = row[7] or ""
-            domain = ""
-
-            # Skip internal/system URLs entirely
-            SKIP_URLS = ("chrome://", "file:///", "chrome-extension://",
-                         "127.0.0.1", "localhost", "edge://", "about:")
-            url_is_real = url and not any(url.startswith(s) for s in SKIP_URLS)
-
-            if url_is_real:
-                try:
-                    parsed = urlparse(url)
-                    domain = (parsed.netloc or parsed.path).lower()
-                    if domain.startswith("www."):
-                        domain = domain[4:]
-                    domain = domain.split(":")[0]  # strip port
-                except Exception:
-                    domain = ""
-
-            SITE_NAMES = {
-                "leetcode.com": "LeetCode",
-                "github.com": "GitHub",
-                "youtube.com": "YouTube",
-                "codeforces.com": "Codeforces",
-                "codechef.com": "CodeChef",
-                "claude.ai": "Claude",
-                "chatgpt.com": "ChatGPT",
-                "chat.openai.com": "ChatGPT",
-                "google.com": "Google",
-                "google.co.in": "Google",
-                "stackoverflow.com": "Stack Overflow",
-                "linkedin.com": "LinkedIn",
-                "twitter.com": "Twitter",
-                "x.com": "Twitter/X",
-                "reddit.com": "Reddit",
-                "notion.so": "Notion",
-                "docs.google.com": "Google Docs",
-                "drive.google.com": "Google Drive",
-                "mail.google.com": "Gmail",
-                "calendar.google.com": "Google Calendar",
-                "sheets.google.com": "Google Sheets",
-                "netflix.com": "Netflix",
-                "spotify.com": "Spotify Web",
-                "kaggle.com": "Kaggle",
-                "geeksforgeeks.org": "GeeksForGeeks",
-                "hackerrank.com": "HackerRank",
-                "medium.com": "Medium",
-                "dev.to": "Dev.to",
-                "npmjs.com": "npm",
-                "pypi.org": "PyPI",
-                "wikipedia.org": "Wikipedia",
-                "glassdoor.com": "Glassdoor",
-                "naukri.com": "Naukri",
-                "internshala.com": "Internshala",
-                "unstop.com": "Unstop",
-                "hackerearth.com": "HackerEarth",
-                "atcoder.jp": "AtCoder",
-                "codingninjas.com": "Coding Ninjas",
-                "amazon.in": "Amazon",
-                "amazon.com": "Amazon",
-                "flipkart.com": "Flipkart",
-                "claude.ai": "Claude",
-                "anthropic.com": "Anthropic",
-                "openai.com": "OpenAI",
-            }
-
-            APP_NAMES = {
-                "chrome.exe": "Chrome",
-                "msedge.exe": "Edge",
-                "firefox.exe": "Firefox",
-                "code.exe": "VS Code",
-                "spotify.exe": "Spotify",
-                "whatsapp.root.exe": "WhatsApp",
-                "whatsapp.exe": "WhatsApp",
-                "chatgpt.exe": "ChatGPT",
-                "discord.exe": "Discord",
-                "explorer.exe": "File Explorer",
-                "notepad.exe": "Notepad",
-                "notepad++.exe": "Notepad++",
-                "teams.exe": "Microsoft Teams",
-                "slack.exe": "Slack",
-                "zoom.exe": "Zoom",
-                "obsidian.exe": "Obsidian",
-                "notion.exe": "Notion",
-                "linkedin.exe": "LinkedIn",
-                "vlc.exe": "VLC",
-                "powershell.exe": "PowerShell",
-                "cmd.exe": "Command Prompt",
-                "windowsterminal.exe": "Terminal",
-                "lockapp.exe": "Lock Screen",
-                "snippingtool.exe": "Snipping Tool",
-                "mspaint.exe": "Paint",
-                "winrar.exe": "WinRAR",
-                "7zfm.exe": "7-Zip",
-                "taskmgr.exe": "Task Manager",
-                "calculator.exe": "Calculator",
-            }
-
-            app_raw = (row[2] or "").lower()
-            app_display = APP_NAMES.get(app_raw, row[2] or "Unknown")
-
-            # Resolve site display name
-            site_display = ""
-            if domain:
-                for known, name in SITE_NAMES.items():
-                    if domain == known or domain.endswith("." + known):
-                        site_display = name
-                        break
-                if not site_display:
-                    # Use first meaningful domain part, skip single-letter or numeric
-                    parts = domain.split(".")
-                    first = parts[0] if parts else ""
-                    if len(first) > 1 and not first.isdigit():
-                        site_display = first.replace("-", " ").title()
-                    # else skip (too short to be meaningful)
+            # Use shared normalization functions defined at module level
+            url         = row[7] or ""
+            window_title_r = row[3] or ""
+            app_display = normalize_app(row[2])
+            site_display = normalize_site(url, window_title_r)
 
             sessions.append({
-                "app": app_display,
-                "site": site_display,
-                "url": url if url_is_real else "",
+                "app":      app_display,
+                "site":     site_display,
+                "url":      url,
                 "start_dt": start_dt,
                 "duration": duration,
             })
