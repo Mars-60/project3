@@ -9,8 +9,7 @@ from backend.database.db import (
 )
 
 app = Flask(__name__)
-CORS(app)
-
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=False)
 # ── Shared lookup tables ──────────────────────────────────────────────────────
 
 SKIP_URLS_GLOBAL = (
@@ -113,6 +112,14 @@ SITE_NAMES_GLOBAL = {
     "apple.com": "Apple",
     "codolio.com": "Codolio",
     "support.google.com": "Google Support",
+    # ── Hosting platforms (subdomain IS the site name) ──
+"gitzy-app-one.vercel.app": "Gitzy",      # your specific app
+"vercel.app": "Vercel App",               # generic fallback
+"netlify.app": "Netlify App",
+"github.io": "GitHub Pages",
+"onrender.com": "Render App",
+"railway.app": "Railway App",
+"fly.dev": "Fly.io App",
 }
 
 # Window titles to skip — only true browser noise, not page names
@@ -168,20 +175,27 @@ def normalize_site(url, window_title=""):
             if full_domain.endswith("." + known) or full_domain == known:
                 return name
 
-        # Fallback: use the REGISTERED domain (second-to-last part before TLD)
-        # e.g. rsvp.withgoogle.com → withgoogle
-        #      chat.openai.com → openai
-        #      www.codeforces.com → codeforces
+       # Known hosting platforms — use the subdomain as the name
+        HOSTING_PLATFORMS = {
+            "vercel.app", "netlify.app", "github.io",
+            "onrender.com", "railway.app", "fly.dev",
+            "herokuapp.com", "pages.dev", "web.app",
+        }
+        # Check if domain ends with a hosting platform
+        for platform in HOSTING_PLATFORMS:
+            if full_domain.endswith("." + platform) or full_domain == platform:
+                # Use subdomain as display name e.g. "gitzy-app-one" → "Gitzy App One"
+                subdomain = full_domain[: -(len(platform) + 1)]
+                # Take first meaningful part before any extra hyphens
+                name_part = subdomain.split(".")[0]  # in case of sub.sub.platform
+                return name_part.replace("-", " ").title()
+
+        # Fallback: registered domain
         parts = full_domain.split(".")
         if len(parts) >= 2:
-            # Use second-to-last part (registered domain name)
             registered = parts[-2]
-            # Skip if too short or numeric (e.g. 127 from 127.0.0.1)
             if len(registered) > 2 and not registered.isdigit():
                 return registered.replace("-", " ").title()
-
-        return ""
-
     except Exception:
         return ""
 

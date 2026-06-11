@@ -198,7 +198,13 @@ body{background:radial-gradient(ellipse 80% 60% at -10% -10%,rgba(91,127,255,0.0
 .chart-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:14px;grid-column:span 2;}
 .card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--text);}
 .card-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-.bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.bar-chart{
+  display:flex;
+  align-items:flex-end;
+  gap:4px;
+  height:120px;
+  width:100%;
+}
 .bar-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
 .bar{width:100%;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,var(--accent) 0%,rgba(91,127,255,0.3) 100%);transition:opacity 200ms;min-height:4px;}
 .bar:hover{opacity:0.8;}
@@ -212,7 +218,8 @@ body{background:radial-gradient(ellipse 80% 60% at -10% -10%,rgba(91,127,255,0.0
 .app-bar-track{height:3px;background:var(--surface3);border-radius:99px;overflow:hidden;margin-top:2px;}
 .app-bar-fill{height:100%;border-radius:99px;}
 
-.timeline-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;grid-column:span 3;display:flex;flex-direction:column;gap:14px;overflow:hidden;}
+.timeline-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;grid-column:span 3;display:flex;flex-direction:column;gap:14px; overflow:visible;
+  min-height:280px;}
 .timeline-scroll{overflow-y:auto;display:flex;flex-direction:column;gap:2px;max-height:220px;}
 .tl-item{display:flex;align-items:flex-start;gap:12px;padding:9px 10px;border-radius:10px;transition:background 150ms;cursor:default;}
 .tl-item:hover{background:var(--surface2);}
@@ -621,6 +628,7 @@ updateDate(); setInterval(updateDate, 30000);
 
 // ── VIEW SWITCHING ──
 const ALL_VIEWS = ['home','dashboard','activity'];
+
 function switchView(name) {
   ALL_VIEWS.forEach(v => {
     const el = document.getElementById('view-'+v);
@@ -635,8 +643,8 @@ function switchView(name) {
   });
 
   if (name === 'activity') renderFeed(allLogs);
+  if (name === 'dashboard') loadDashboard();
 }
-
 document.querySelectorAll('.nav-item[data-view]').forEach(item => {
   item.addEventListener('click', () => switchView(item.dataset.view));
 });
@@ -828,7 +836,7 @@ function renderDashboard(d) {
     // Only show hours 6am–midnight
     const visible = d.hourly.filter(h => h.hour >= 6 && h.hour <= 23);
     hourEl.innerHTML = visible.map(h => {
-      const ht = Math.max(4, Math.round((h.seconds / maxSec) * 72));
+      const ht = Math.max(8, Math.round((h.seconds / maxSec) * 90));
       const label = h.hour === 12 ? '12pm' : h.hour > 12 ? (h.hour-12)+'pm' : h.hour+'am';
       return `<div class="bar-col">
         <div class="bar" style="height:${ht}px" title="${label}: ${fmtDuration(h.seconds)}"></div>
@@ -1066,8 +1074,13 @@ async function doSubmit(question){
     busy=false;sendBtn.disabled=false;chatInput.focus();
   }
 }
-
 loadAll();
+// Auto-refresh dashboard and activity every 30 seconds
+setInterval(() => {
+  loadDashboard();
+  loadStats();
+  loadTimeline();
+}, 30000);
 </script>
 </body>
 </html>
