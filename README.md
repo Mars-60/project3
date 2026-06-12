@@ -9,7 +9,7 @@ Atlas silently tracks your PC activity in the background and lets you explore ev
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776ab?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-2.x-black?style=flat-square&logo=flask)](https://flask.palletsprojects.com)
-[![Gemini](https://img.shields.io/badge/Gemini_AI-powered-4285f4?style=flat-square&logo=google)](https://aistudio.google.com)
+[![Gemini](https://img.shields.io/badge/Gemini_AI-chat-4285f4?style=flat-square&logo=google)](https://aistudio.google.com)
 [![Platform](https://img.shields.io/badge/Platform-Windows-0078d4?style=flat-square&logo=windows)](https://www.microsoft.com/windows)
 [![Demo](https://img.shields.io/badge/Demo-Live-5b7fff?style=flat-square&logo=vercel)](https://atlas-live-demo.vercel.app/)
 
@@ -52,27 +52,27 @@ Open the dashboard any time to see your day — or ask *"What was I doing at 3pm
 ## How It Works
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                   Your Windows PC                   │
-│                                                     │
+┌────────────────────────────────────────────────────┐
+│                   Your Windows PC                  │
+│                                                    │
 │  ┌─────────────┐    ┌──────────────┐               │
 │  │Window Logger│    │Chrome Ext.   │               │
 │  │(active app, │    │(tab switches,│               │
 │  │window title)│    │ heartbeats)  │               │
 │  └──────┬──────┘    └──────┬───────┘               │
-│         │                  │                        │
-│         └────────┬─────────┘                        │
-│                  ▼                                   │
-│          ┌──────────────┐                           │
-│          │  Flask API   │  ◄── SQLite DB            │
-│          │  :5000       │  ◄── ChromaDB             │
-│          └──────┬───────┘                           │
-│                 │                                    │
-│          ┌──────▼───────┐                           │
-│          │ atlas.html   │  ← You open this          │
-│          │  Dashboard   │                           │
-│          └──────────────┘                           │
-└─────────────────────────────────────────────────────┘
+│         │                  │                       │
+│         └────────┬─────────┘                       │
+│                  ▼                                 │
+│          ┌──────────────┐                          │
+│          │  Flask API   │  ◄── SQLite DB           │
+│          │  :5000       │  ◄── Gemini AI           │
+│          └──────┬───────┘                          │
+│                 │                                  │
+│          ┌──────▼───────┐                          │
+│          │ atlas.html   │  ← You open this         │
+│          │  Dashboard   │                          │
+│          └──────────────┘                          │
+└────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -102,13 +102,13 @@ Or [download as ZIP](https://github.com/YOUR_USERNAME/atlas/archive/refs/heads/m
 
 Double-click `setup.bat` and follow the prompts. It will:
 
-1. ✅ Check Python and pip
-2. ✅ Create a virtual environment
-3. ✅ Install all dependencies
-4. ✅ Check Tesseract OCR
-5. ✅ Ask for your Gemini API key and save it
-6. ✅ Initialize the database
-7. ✅ Ask if you want Atlas to auto-start on login (recommended: Y)
+1.  Check Python and pip
+2.  Create a virtual environment
+3.  Install all dependencies
+4.  Check Tesseract OCR
+5.  Ask for your Gemini API key and save it
+6.  Initialize the database
+7.  Ask if you want Atlas to auto-start on login (recommended: Y)
 
 > **Setup takes about 3–5 minutes on first run.**
 
@@ -240,11 +240,13 @@ atlas/
 
 | Layer | Technology |
 |---|---|
-| Backend | Python, Flask, flask-cors |
-| AI | Google Gemini API, ChromaDB (RAG) |
-| Database | SQLite |
+| Backend | Python 3.10+, Flask, flask-cors |
+| AI | Google Gemini API |
+| Database | SQLite (local, no server needed) |
 | OCR | Tesseract OCR + pytesseract |
-| Frontend | Vanilla HTML/CSS/JS (single file) |
+| Screenshots | Pillow (PIL) |
+| Window Tracking | pywin32, pygetwindow |
+| Frontend | Vanilla HTML/CSS/JS (single file, no framework) |
 | Browser | Chrome Extension (Manifest V3) |
 | Deployment | Runs locally on Windows |
 
