@@ -6208,3 +6208,30 @@ OCR record inserted
 [Logger] Code.exe → Visual Studio Code
 [Logger] Code.exe → PersonalOS AI - Visual Studio Code
 127.0.0.1 - - [12/Jun/2026 07:05:30] "POST /browser_activity HTTP/1.1" 200 -
+OCR collection started
+Screenshot captured: screenshots/active_window.png
+OCR text length: 761
+OCR similarity score: 0.846
+OCR record inserted
+[OCR] Captured for Code.exe
+[Logger] chrome.exe → Auto-start project on PC login - Claude - Google Chrome
+127.0.0.1 - - [12/Jun/2026 07:05:35] "POST /browser_activity HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2026 07:05:40] "POST /browser_activity HTTP/1.1" 200 -
+[Logger] Code.exe → PersonalOS AI - Visual Studio Code
+127.0.0.1 - - [12/Jun/2026 07:05:45] "POST /browser_activity HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2026 07:05:50] "POST /browser_activity HTTP/1.1" 200 -
+[Logger] Code.exe → main.py - PersonalOS AI - Visual Studio Code
+127.0.0.1 - - [12/Jun/2026 07:05:55] "POST /browser_activity HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2026 07:06:00] "POST /browser_activity HTTP/1.1" 200 -
+[Logger] Code.exe → start_atlas.py - PersonalOS AI - Visual Studio Code
+OCR collection started
+Screenshot captured: screenshots/active_window.png
+127.0.0.1 - - [12/Jun/2026 07:06:02] "GET /recent?limit=150 HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2026 07:06:02] "GET /dashboard_stats?range=today HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2026 07:06:02] "GET /stats HTTP/1.1" 200 -
+OCR text length: 1408
+OCR similarity score: 0.630
+OCR record inserted
+[OCR] Captured for Code.exe
+127.0.0.1 - - [12/Jun/2026 07:06:05] "POST /browser_activity HTTP/1.1" 200 -
+127.0.0.1 - - [12/Jun/2026 07:06:10] "POST /browser_activity HTTP/1.1" 200 -
