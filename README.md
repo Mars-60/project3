@@ -2,7 +2,7 @@
 
 <img src="https://img.shields.io/badge/Atlas-5b7fff?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTQiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSJub25lIi8+PGVsbGlwc2UgY3g9IjE2IiBjeT0iMTYiIHJ4PSI2IiByeT0iMTQiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41IiBmaWxsPSJub25lIi8+PGxpbmUgeDE9IjIiIHkxPSIxNiIgeDI9IjMwIiB5Mj0iMTYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMS41Ii8+PC9zdmc+" alt="Atlas">
 
-# Atlas
+# Atlas 
 
 **Your local AI memory layer for Windows.**  
 Atlas silently tracks your PC activity in the background and lets you explore everything — apps used, websites visited, screen time, and more — through a beautiful dashboard. Ask questions about your day in plain English using the built-in AI chat.
@@ -11,8 +11,11 @@ Atlas silently tracks your PC activity in the background and lets you explore ev
 [![Flask](https://img.shields.io/badge/Flask-2.x-black?style=flat-square&logo=flask)](https://flask.palletsprojects.com)
 [![Gemini](https://img.shields.io/badge/Gemini_AI-powered-4285f4?style=flat-square&logo=google)](https://aistudio.google.com)
 [![Platform](https://img.shields.io/badge/Platform-Windows-0078d4?style=flat-square&logo=windows)](https://www.microsoft.com/windows)
+[![Demo](https://img.shields.io/badge/Demo-Live-5b7fff?style=flat-square&logo=vercel)](https://atlas-live-demo.vercel.app/)
 
-![Atlas Dashboard](https://raw.githubusercontent.com/Mars-60/atlas/main/screenshots/dashboard_preview.png)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-atlas--live--demo.vercel.app-5b7fff?style=for-the-badge&logo=vercel&logoColor=white)](https://atlas-live-demo.vercel.app/)
+
+> **[→ Try the live demo](https://atlas-live-demo.vercel.app/)** — explore the dashboard with sample data, no setup needed.
 
 </div>
 
@@ -261,7 +264,7 @@ Pull requests are welcome. For major changes, please open an issue first.
 
 <div align="center">
 
-Built by [Adnan Raza](https://github.com/YOUR_USERNAME) · CSE - JMI, New Delhi, India  
+Built by [Adnan Raza](https://github.com/YOUR_USERNAME) · CSE @ JMI, New Delhi, India  
 *A personal project to track and understand how I spend my time on my PC.*
 
 </div>
